@@ -1,0 +1,6 @@
+# 格式
+*.pyc
+
+# 文件夹
+/.idea/
+/cubeopen.egg-info/

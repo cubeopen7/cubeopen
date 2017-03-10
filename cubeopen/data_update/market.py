@@ -1,12 +1,9 @@
 # -*- coding:utf8 -*-
 
-import tquant
-import tushare
-
-from cubeopen.utils import *
-from cubeopen.logger.logger import *
-from cubeopen.dbwarpper.queryApi import *
 from cubeopen.dbwarpper.mongodb import get_mongo_db
+from cubeopen.logger.logger import *
+from cubeopen.queryApi import *
+
 
 def update_market():
     # 获取Mongo数据库连接

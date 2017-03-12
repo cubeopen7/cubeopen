@@ -1,6 +1,6 @@
 # -*- coding:utf8 -*-
 
-from cubeopen.dbwarpper.mongodb import get_mongo_db
+from cubeopen.dbwarpper.connect.mongodb import get_mongo_db
 
 # 获取标的在行情数据库中最新一条数据的时间
 def get_stock_latest_db_date(code):

@@ -1,6 +1,6 @@
 # -*- coding:utf8 -*-
 
-from cubeopen.dbwarpper.mongodb import get_mongo_db
+from cubeopen.dbwarpper.connect.mongodb import get_mongo_db
 from cubeopen.logger.logger import *
 from cubeopen.queryApi import *
 

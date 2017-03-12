@@ -22,5 +22,5 @@ class MongoClass:
     def database(self):
         return self._database
     @property
-    def get_collection(self):
+    def collection(self):
         return self._collection

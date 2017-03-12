@@ -6,5 +6,10 @@ setup(
     name = "cubeopen",
     version="0.0.1",
     description="CubeQuant",
-    packages=find_packages()
+    packages=find_packages(),
+    install_requires=[
+        "pymongo",
+        "pandas",
+        "numpy",
+    ]
 )

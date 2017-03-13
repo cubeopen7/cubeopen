@@ -1,0 +1,5 @@
+# base_info.job
+
+type=command
+working.dir=D:/Code/cubeopen/cubeopen/data_script
+command=python base_info.py

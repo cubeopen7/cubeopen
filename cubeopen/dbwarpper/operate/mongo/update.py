@@ -90,7 +90,10 @@ def update_df_base_info(df_data):
     exect_count = 0
     error_count = 0
     today_date = datetime.datetime.now().strftime("%Y%m%d")
-    holder = pd.DataFrame(list(coll.find({},{"_id":0, "code":1, "holders":1}))).set_index("code")
+    try:
+        holder = pd.DataFrame(list(coll.find({},{"_id":0, "code":1, "holders":1}))).set_index("code")
+    except:
+        holder = None
     for i in range(num):
         try:
             value = df_data.iloc[i]

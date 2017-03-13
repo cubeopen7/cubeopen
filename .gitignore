@@ -1,6 +1,7 @@
-# 格式
+# FORMAT
 *.pyc
 
-# 文件夹
+# FOLDER
+/log/
 /.idea/
 /cubeopen.egg-info/

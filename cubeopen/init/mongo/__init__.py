@@ -12,6 +12,6 @@ def init_mongo():
     # 1.日线行情表
     coll_name = "market_daily"
     coll = db.get_collection(coll_name)
-    coll.create_index([("code", 1)])
-    coll.create_index([("date", -1)])
-    coll.create_index([("code", 1), ("date", -1)])
+    coll.ensure_index([("code", 1)])
+    coll.ensure_index([("date", -1)])
+    coll.ensure_index([("code", 1), ("date", -1)])

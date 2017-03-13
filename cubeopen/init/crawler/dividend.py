@@ -1,9 +1,10 @@
 # -*- coding:utf-8 -*-
 
-import os
 import urllib
 import datetime
 import pandas as pd
+
+from cubeopen.dbwarpper.connect.mongodb import MongoClass
 
 def get_dividend_file():
     today_date = datetime.datetime.now()
@@ -50,5 +51,34 @@ def get_dividend_file():
     result = result.sort_values(by="execute_date", ascending=False)
     result.to_csv("../source/dividend.csv", index=False)
 
+def insert_mongo():
+    data = pd.read_csv("../source/dividend.csv", encoding="gbk", dtype={"code":str,
+                                                                        "name":str,
+                                                                        "share":float,
+                                                                        "bonus_share":float,
+                                                                        "conver_share":float,
+                                                                        "cash":float,
+                                                                        "report_date":str,
+                                                                        "reg_date":str,
+                                                                        "execute_date":str,
+                                                                        "end_date":str})
+    client = MongoClass
+    client.set_datebase("cubeopen")
+    client.set_collection("fncl_dividend")
+    coll = client.collection
+    # 创建索引
+    coll.ensure_index([("code", 1)])
+    coll.ensure_index([("execute_date", -1)])
+    coll.ensure_index([("report_date", -1)])
+    coll.ensure_index([("reg_date", -1)])
+    coll.ensure_index([("end_date", -1)])
+    # 插入数据
+    data_list = []
+    for i in range(data.shape[0]):
+        value = data.iloc[i].to_dict()
+        data_list.append(value)
+    coll.insert_many(data_list)
+
 if __name__ == "__main__":
     get_dividend_file()
+    insert_mongo()

@@ -48,7 +48,7 @@ def update_base_info():
         logger.error(traceback.format_exc())
         logger.error("[数据更新][update_base_info]Mongodb数据更新错误")
         raise
-    logger_info.info("[数据更新][base_info]表更新完成, 更新%d条数据, %d条数据更新错误" % (t_num, f_num))
+    logger_info.info("[数据更新][base_info]基础信息表更新完成, 更新%d条数据, %d条数据更新错误" % (t_num, f_num))
     result["t_num"] = t_num
     result["f_num"] = f_num
     return result

@@ -107,10 +107,10 @@ def update_df_base_info(df_data):
             recent_holders = value_dict["holders"]
             if former_holders!=0 and former_holders is not None and former_holders!=recent_holders:
                 change = (recent_holders-former_holders)/former_holders * 100
-                coll_holder.update_one({"code": code},
-                                       {"code": code,
-                                        "date": today_date,
-                                        "holder_chg": change}, upsert=True)
+                coll_holder.update_many({"code": code},
+                                        {"$set":{"code": code,
+                                                  "date": today_date,
+                                                  "holder_chg": change}}, upsert=True)
                 logger_info.info("[{}]股东人数变更,更新记录".format(code))
             coll.update_many({"code": code}, {"$set": value_dict}, upsert=True)
             exect_count += 1

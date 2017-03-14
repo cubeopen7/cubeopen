@@ -2,6 +2,7 @@
 *.pyc
 
 # FOLDER
+/job/
 /log/
 /.idea/
 /cubeopen.egg-info/

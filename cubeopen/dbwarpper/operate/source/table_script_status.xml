@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<table>
+    <title>script_status</title>
+    <column>
+        <name>script_id</name>
+        <attr>varchar(50)</attr>
+        <key>1</key>>
+    </column>
+    <column>
+        <name>create_date</name>
+        <attr>varchar(50)</attr>
+    </column>
+    <column>
+        <name>last_start_date</name>
+        <attr>varchar(50)</attr>
+    </column>
+    <column>
+        <name>last_end_date</name>
+        <attr>varchar(50)</attr>
+    </column>
+    <column>
+        <name>status</name>
+        <attr>int</attr>
+    </column>
+</table>

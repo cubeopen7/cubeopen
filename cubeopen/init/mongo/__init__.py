@@ -1,7 +1,7 @@
 # -*- coding:utf8 -*-
 
-from cubeopen.dbwarpper.connect.mongodb import MongoClass
 from .calendar import init_calendar
+from cubeopen.dbwarpper.connect.mongodb import MongoClass
 
 def init_mongo():
     client = MongoClass

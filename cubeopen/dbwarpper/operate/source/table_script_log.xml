@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<table>
+    <title>script_log</title>
+    <column>
+        <name>script_id</name>
+        <attr>varchar(50)</attr>
+        <key>1</key>
+    </column>
+    <column>
+        <name>start_time</name>
+        <attr>varchar(50)</attr>
+        <key>1</key>
+    </column>
+    <column>
+        <name>end_time</name>
+        <attr>varchar(50)</attr>
+    </column>
+    <column>
+        <name>record_num</name>
+        <attr>int</attr>
+    </column>
+    <column>
+        <name>error_num</name>
+        <attr>int</attr>
+    </column>
+    <column>
+        <name>time_cost</name>
+        <attr>double</attr>
+    </column>
+</table>

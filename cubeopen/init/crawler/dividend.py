@@ -1,10 +1,15 @@
 # -*- coding:utf-8 -*-
 
+__all__ = ["get_dividend_file", "insert_mongo"]
+
+import os
 import urllib
 import datetime
 import pandas as pd
 
 from cubeopen.dbwarpper.connect.mongodb import MongoClass
+
+_dir = os.path.abspath(os.path.join(os.path.split(os.path.realpath(__file__))[0], os.path.pardir))+"/source/"
 
 def get_dividend_file():
     today_date = datetime.datetime.now()
@@ -43,16 +48,16 @@ def get_dividend_file():
         data["reg_date"] = data["reg_date"].map(time_transfer)
         data["execute_date"] = data["execute_date"].map(time_transfer)
         data["end_date"] = data["end_date"].map(time_transfer)
-        data.to_csv("../source/{}.csv".format(date), index=False)
+        data.to_csv(_dir+"{}.csv".format(date), index=False)
         if result is None:
             result = data
         else:
             result = result.append(data)
     result = result.sort_values(by="execute_date", ascending=False)
-    result.to_csv("../source/dividend.csv", index=False)
+    result.to_csv(_dir+"dividend.csv", index=False)
 
 def insert_mongo():
-    data = pd.read_csv("../source/dividend.csv", encoding="gbk", dtype={"code":str,
+    data = pd.read_csv(_dir+"dividend.csv", encoding="gbk", dtype={"code":str,
                                                                         "name":str,
                                                                         "share":float,
                                                                         "bonus_share":float,

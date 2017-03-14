@@ -3,10 +3,15 @@
 import tushare as ts
 
 from cubeopen.logger.logger import *
+from cubeopen.utils.decorator import data_log
 from cubeopen.dbwarpper.operate.mongo.update import update_df_base_info
 from cubeopen.data_source.youpin.market import getYoupinTodayInfo_21007
 
+@data_log("base_info")
 def update_base_info():
+    result = {"t_num": 0,
+              "f_num": 0,
+              "error": 0}
     # 获取logger
     logger = get_logger("error")
     logger_info = get_logger("cubeopen")
@@ -16,6 +21,7 @@ def update_base_info():
     except Exception as e:
         logger.error(traceback.format_exc())
         logger.error("[数据更新][update_base_info][优品]获取上市公司基本信息错误")
+        result["error"] = 1
         raise
     # 获取tushare上市公司基本情况
     try:
@@ -43,6 +49,9 @@ def update_base_info():
         logger.error("[数据更新][update_base_info]Mongodb数据更新错误")
         raise
     logger_info.info("[数据更新][base_info]表更新完成, 更新%d条数据, %d条数据更新错误" % (t_num, f_num))
+    result["t_num"] = t_num
+    result["f_num"] = f_num
+    return result
 
 if __name__ == "__main__":
     update_base_info()

@@ -11,5 +11,6 @@ setup(
         "pymongo",
         "pandas",
         "numpy",
+        "PyMySQL",
     ]
 )

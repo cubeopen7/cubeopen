@@ -1,7 +1,7 @@
 # -*- coding:utf8 -*-
 
 import pymongo
-from cubeopen.utils.decorator import singleton
+from cubeopen.utils.single import singleton
 
 @singleton
 class MongoClass:

@@ -6,3 +6,4 @@
 /log/
 /.idea/
 /cubeopen.egg-info/
+/cubeopen/init/mongo/source/market_data/

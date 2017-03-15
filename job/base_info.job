@@ -1,3 +1,0 @@
-# base_info.job
-type=command
-command=python D:/Code/cubeopen/cubeopen/data_script/base_info.py

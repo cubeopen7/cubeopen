@@ -7,6 +7,10 @@ import pandas as pd
 from .method import *
 from cubeopen.logger.logger import *
 
+# 接口20044: 历史(包含今日)日线
+def getInterface_20044():
+    pass
+
 # 今日股票基本情况信息
 def getYoupinTodayInfo_21007(field = ["code", "pyname", "name", "market", "stock_type", "pe", "market_capital", "circulating_market_capital", "market_value", "circulating_market_value"]):
     logger = get_logger("cubeopen")

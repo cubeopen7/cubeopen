@@ -2,7 +2,7 @@
 
 from cubeopen.dbwarpper.connect.mongodb import get_mongo_db
 from cubeopen.logger.logger import *
-from cubeopen.queryApi import *
+from cubeopen.query import *
 
 
 def update_market():

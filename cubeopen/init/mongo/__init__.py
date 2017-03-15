@@ -1,5 +1,6 @@
 # -*- coding:utf8 -*-
 
+from .market import init_market
 from .calendar import init_calendar
 from cubeopen.dbwarpper.connect.mongodb import MongoClass
 

@@ -33,7 +33,8 @@ def getYoupinMarketUrl(funcno, version="1", **kwargs):
             if key == "field":
                 url += "&" + "field=" + getFieldString(value)
             else:
-                url += "&" + key + "=" +str(value)
+                if value is not None:
+                    url += "&" + key + "=" +str(value)
         except Exception as e:
             raise ValueError("参数{}值错误".format(key))
     return url

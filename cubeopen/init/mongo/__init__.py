@@ -16,3 +16,9 @@ def init_mongo():
     coll.ensure_index([("code", 1)])
     coll.ensure_index([("date", -1)])
     coll.ensure_index([("code", 1), ("date", -1)])
+    # 2.财务数据表
+    coll_name = "fncl_statement"
+    coll = db.get_collection(coll_name)
+    coll.ensure_index([("code", 1)])
+    coll.ensure_index([("date", -1)])
+    coll.ensure_index([("code", 1), ("date", -1)])

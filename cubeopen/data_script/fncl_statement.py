@@ -4,6 +4,7 @@ import tquant
 
 from cubeopen.query import *
 from cubeopen.logger.logger import *
+from cubeopen.utils.func import *
 from cubeopen.utils.decorator import data_log
 from cubeopen.dbwarpper.connect.mongodb import MongoClass
 
@@ -30,6 +31,18 @@ def update_fncl_statement():
         logger.error(traceback.format_exc())
         logger.error("[数据更新][update_fncl_statement]获取股票列表失败")
         raise
+    # 全局变量
+    last_quarter = latest_quarter(today_date())
+    # 每支标的循环
+    for code in stock_list:
+        latest_date = queryDateStockFnclLast(code)
+        if latest_date == "0":
+            data_list = tquant.get_financial(code)
+            a = 1
+        else:
+            if latest_date == last_quarter:
+                continue
+            pass
 
 
 

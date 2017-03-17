@@ -6,6 +6,7 @@ import pandas as pd
 
 from .method import *
 from cubeopen.logger.logger import *
+from cubeopen.utils.error_class import YoupinError
 
 # 接口20044: 历史(包含今日)日线
 def getInterface_20044(code, market=None, count=None, type="day", lastcount=None):
@@ -32,7 +33,7 @@ def getInterface_20044(code, market=None, count=None, type="day", lastcount=None
         error_info = result_dict.get("errorInfo")
         if error_no != 0:
             logger.error("[行情][20044]接口错误,错误代码:{},错误描述:{}".format(error_no, error_info))
-            raise ValueError("[行情][20044]接口错误,错误代码:{},错误描述:{}".format(error_no, error_info))
+            raise YoupinError("[行情][20044]接口错误,错误代码:{},错误描述:{}".format(error_no, error_info))
         result = result_dict.get("results")
         data = pd.DataFrame(result, columns=["date", "open", "high", "close", "low", "per_close", "turnover", "volume", "amount", "ma5", "ma10", "ma20", "ma30", "ma60"])
         data["turnover"] = data["turnover"] * 100

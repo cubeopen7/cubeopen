@@ -1,6 +1,7 @@
 # -*- coding:utf8 -*-
 
 import os
+import numpy as np
 import pandas as pd
 
 from cubeopen.logger.logger import *
@@ -30,6 +31,15 @@ def init_market():
             data["date"] = data["date"].map(lambda x: str(x.replace("-", "")))
             data["chg"] = data["chg"].map(lambda x: x * 100)
             data["turnover"] = data["turnover"].map(lambda x: x * 100)
+            # 初始化计算: per_close, ma5,10,20,30,60
+            data = data.sort_values(by="date", ascending=True)
+            per_close = np.r_[np.nan, data["close"].values[:-1]]
+            data["per_close"] = per_close
+            data["ma5"] = data["close"].rolling(5).mean()
+            data["ma10"] = data["close"].rolling(10).mean()
+            data["ma20"] = data["close"].rolling(20).mean()
+            data["ma30"] = data["close"].rolling(30).mean()
+            data["ma60"] = data["close"].rolling(60).mean()
             data_list = []
             for i in range(data.shape[0]):
                 t = data.iloc[i].to_dict()

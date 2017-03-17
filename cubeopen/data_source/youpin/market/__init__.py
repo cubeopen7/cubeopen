@@ -35,9 +35,10 @@ def getInterface_20044(code, market=None, count=None, type="day", lastcount=None
             raise ValueError("[行情][20044]接口错误,错误代码:{},错误描述:{}".format(error_no, error_info))
         result = result_dict.get("results")
         data = pd.DataFrame(result, columns=["date", "open", "high", "close", "low", "per_close", "turnover", "volume", "amount", "ma5", "ma10", "ma20", "ma30", "ma60"])
-        a = 1
-
-    pass
+        data["turnover"] = data["turnover"] * 100
+        data["volume"] = data["volume"] * 100
+        data["date"] = data["date"].astype(str)
+        return data
 
 # 今日股票基本情况信息
 def getYoupinTodayInfo_21007(field = ["code", "pyname", "name", "market", "stock_type", "pe", "market_capital", "circulating_market_capital", "market_value", "circulating_market_value"]):

@@ -63,7 +63,6 @@ def update_fncl_dividend():
             logger.error(traceback.format_exc())
             logger.error("[数据更新][update_fncl_dividend][%s-%s]分红数据更新错误" % (code, name))
             f_num += 0
-            raise
     result["t_num"] = t_num
     result["f_num"] = f_num
     logger_info.info("[数据更新][fncl_dividend]分红表更新完成, 更新%d条数据, %d条数据更新错误" % (t_num, f_num))

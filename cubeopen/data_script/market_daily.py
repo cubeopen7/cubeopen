@@ -55,7 +55,6 @@ def update_market_daily():
                 logger_info.info("[数据更新][update_market_daily][%s]日线行情数据更新" % (code,))
                 t_num += 1
         except YoupinError as e:
-            logger.error(e)
             logger.error("[数据更新][update_market_daily][%s]日线行情数据更新错误" % (code,))
         except Exception as e:
             logger.error(traceback.format_exc())

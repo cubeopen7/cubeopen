@@ -50,14 +50,47 @@ def update_fncl_statement():
     last_quarter = latest_quarter(today_date())
     # 每支标的循环
     for code in stock_list:
-        latest_date = queryDateStockFnclLast(code)
-        if latest_date == "0":
-            data_list = tquant.get_financial(code)
-            a = 1
-        else:
-            if latest_date == last_quarter:
-                continue
-            pass
+        try:
+            latest_date = queryDateStockFnclLast(code)
+            if latest_date == "0":
+                data_list = tquant.get_financial(code)
+                # 资产负债表
+                debt_pd = data_list[0]
+                debt_pd.columns = DEBT_COLUMNS
+                debt_pd["date"] = debt_pd.index
+                debt_pd["date"] = debt_pd["date"].map(lambda x: x.strftime("%Y%m%d"))
+                debt_pd = debt_pd.reset_index(drop=True)
+                # 利润表
+                benefit_pd = data_list[1]
+                benefit_pd.columns = BENEFIT_COLUMNS
+                benefit_pd["date"] = benefit_pd.index
+                benefit_pd["date"] = benefit_pd["date"].map(lambda x: x.strftime("%Y%m%d"))
+                benefit_pd = benefit_pd.reset_index(drop=True)
+                # 现金流量表
+                cash_pd = data_list[2]
+                cash_pd.columns = CASH_COLUMNS
+                cash_pd["date"] = cash_pd.index
+                cash_pd["date"] = cash_pd["date"].map(lambda x: x.strftime("%Y%m%d"))
+                cash_pd = cash_pd.reset_index(drop=True)
+                # 财务总表，合并
+                data = debt_pd.copy()
+                data = data.merge(benefit_pd, how="outer", on="date")
+                data = data.merge(cash_pd, how="outer", on="date").sort_values(by="date", ascending=True)
+                data_list = []
+                for i in range(data.shape[0]):
+                    value = data.iloc[i].to_dict()
+                    date = value["date"]
+                    report_date = queryDateReport(code, date)
+                    a = 1
+                a = 1
+            else:
+                if latest_date == last_quarter:
+                    continue
+                pass
+        except Exception as e:
+            logger.error(traceback.format_exc())
+            logger.error("[数据更新][update_fncl_statement][%s]财务数据更新错误" % (code,))
+            f_num += 1
 
 
 

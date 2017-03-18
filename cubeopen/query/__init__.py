@@ -2,3 +2,4 @@
 
 from .base_query import *
 from .date_query import *
+from .youpin_query import *

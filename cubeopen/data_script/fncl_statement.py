@@ -115,8 +115,59 @@ def update_fncl_statement():
                 #     a = 1
                 # a = 1
             else:
+                # 表中已是最近季度的数据,则跳过
                 if latest_date == last_quarter:
                     continue
+                # 表中是老数据,则下载最新数据,查询是否有更新,更新则添加新数据
+                data_list = tquant.get_financial(code)
+                source_date = list(data_list[0].index)[0].strftime("%Y%m%d")
+                if latest_date == source_date:
+                    # 数据源无新数据
+                    continue
+                # 数据源有新数据
+                # 资产负债表
+                debt_pd = data_list[0]
+                debt_column = list(debt_pd.columns)
+                debt_chs = []
+                debt_eng = []
+                for t in debt_column:
+                    if t in DEBT:
+                        debt_chs.append(t)
+                        debt_eng.append(DEBT[t])
+                debt_real = debt_pd[debt_chs]
+                debt_real.columns = debt_eng
+                debt_real["date"] = debt_real.index
+                debt_real["date"] = debt_real["date"].map(lambda x: x.strftime("%Y%m%d"))
+                debt_real = debt_real.reset_index(drop=True)
+                # 利润表
+                benefit_pd = data_list[1]
+                benefit_column = list(benefit_pd.columns)
+                benefit_chs = []
+                benefit_eng = []
+                for t in benefit_column:
+                    if t in BENEFIT:
+                        benefit_chs.append(t)
+                        benefit_eng.append(BENEFIT[t])
+                benefit_real = benefit_pd[benefit_chs]
+                benefit_real.columns = benefit_eng
+                benefit_real["date"] = benefit_real.index
+                benefit_real["date"] = benefit_real["date"].map(lambda x: x.strftime("%Y%m%d"))
+                benefit_real = benefit_real.reset_index(drop=True)
+                # 现金流量表
+                cash_pd = data_list[2]
+                cash_column = list(cash_pd.columns)
+                cash_chs = []
+                cash_eng = []
+                for t in cash_column:
+                    if t in CASH:
+                        cash_chs.append(t)
+                        cash_eng.append(CASH[t])
+                cash_real = cash_pd[cash_chs]
+                cash_real.columns = cash_eng
+                cash_real["date"] = cash_real.index
+                cash_real["date"] = cash_real["date"].map(lambda x: x.strftime("%Y%m%d"))
+                cash_real = cash_real.reset_index(drop=True)
+                a = 1
         except Exception as e:
             logger.error(traceback.format_exc())
             logger.error("[数据更新][update_fncl_statement][%s]财务数据更新错误" % (code,))

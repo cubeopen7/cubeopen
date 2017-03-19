@@ -15,6 +15,8 @@ def queryDateReport(code, date):
     try:
         r = cursor.execute(sql)
         result = cursor.fetchone()
+        if result is None:
+            return None
         if len(result) == 0:
             return None
         if result[0] is None:
@@ -24,4 +26,4 @@ def queryDateReport(code, date):
     except Exception as e:
         logger.error(traceback.format_exc())
         logger.error("[queryDateReport][优品]查询财务报表发布日期错误")
-        return -1
+        return None

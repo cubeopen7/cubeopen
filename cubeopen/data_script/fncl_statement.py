@@ -9,7 +9,6 @@ from cubeopen.utils.func import *
 from cubeopen.utils.constant import *
 from cubeopen.utils.decorator import data_log
 from cubeopen.dbwarpper.connect.mongodb import MongoClass
-from cubeopen.dbwarpper.connect.mysqldb import YoupinClass
 
 @data_log("fncl_statement")
 def update_fncl_statement():

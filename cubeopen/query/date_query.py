@@ -2,7 +2,6 @@
 
 from cubeopen.dbwarpper.connect.mongodb import MongoClass
 
-
 # 查询标的在日线行情数据库(market_daily)中的最新数据对应的日期
 def queryDateSingleStockLast(code):
     client = MongoClass

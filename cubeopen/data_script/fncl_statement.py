@@ -13,13 +13,11 @@ from cubeopen.dbwarpper.connect.mysqldb import YoupinClass
 
 @data_log("fncl_statement")
 def update_fncl_statement():
-    # 获取ongodb数据库连接
+    # 获取mongodb数据库连接
     client = MongoClass
     client.set_datebase("cubeopen")
     client.set_collection("fncl_statement")
     coll = client.collection
-    sql_db = YoupinClass.database
-    cursor = YoupinClass.cursor
     # 获取logger
     logger = get_logger("error")
     logger_info = get_logger("cubeopen")

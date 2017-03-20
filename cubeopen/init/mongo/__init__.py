@@ -21,4 +21,6 @@ def init_mongo():
     coll = db.get_collection(coll_name)
     coll.ensure_index([("code", 1)])
     coll.ensure_index([("date", -1)])
+    coll.ensure_index([("report_date", -1)])
     coll.ensure_index([("code", 1), ("date", -1)])
+    coll.ensure_index([("code", 1), ("report_date", -1)])

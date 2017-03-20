@@ -103,17 +103,6 @@ def update_fncl_statement():
                 coll.insert_many(data_list)
                 logger_info.info("[数据更新][update_fncl_statement][%s]财务数据初次写入" % (code,))
                 t_num += 1
-                # for i in range(data.shape[0]):
-                #     value = data.iloc[i].to_dict()
-                #     date = value["date"]
-                #     report_date = queryDateReport(code, date)
-                #     value["report_date"] = report_date
-                #     for k, v in value.items():
-                #         if isinstance(v, float):
-                #             if math.isnan(v):
-                #                 value[k] = None
-                #     a = 1
-                # a = 1
             else:
                 # 表中已是最近季度的数据,则跳过
                 if latest_date == last_quarter:
@@ -167,7 +156,24 @@ def update_fncl_statement():
                 cash_real["date"] = cash_real.index
                 cash_real["date"] = cash_real["date"].map(lambda x: x.strftime("%Y%m%d"))
                 cash_real = cash_real.reset_index(drop=True)
-                a = 1
+                # 合并为主表
+                data = debt_real.merge(benefit_real, how="outer", on="date").merge(cash_real, how="outer", on="date").sort_values(by="date", ascending=True)
+                data = data[data["date"] > latest_date]
+                data_list = []
+                for i in range(data.shape[0]):
+                    value = data.iloc[i].to_dict()
+                    date = value["date"]
+                    report_date = queryDateReport(code, date)
+                    value["report_date"] = report_date
+                    value["code"] = code
+                    for k, v in value.items():
+                        if isinstance(v, float):
+                            if math.isnan(v):
+                                value[k] = None
+                    data_list.append(value)
+                coll.insert_many(data_list)
+                logger_info.info("[数据更新][update_fncl_statement][%s]财务数据更新完成" % (code,))
+                t_num += 1
         except Exception as e:
             logger.error(traceback.format_exc())
             logger.error("[数据更新][update_fncl_statement][%s]财务数据更新错误" % (code,))

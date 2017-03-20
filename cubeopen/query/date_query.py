@@ -26,3 +26,15 @@ def queryDateStockFnclLast(code):
     else:
         return result[0]["date"]
 
+# 查询龙虎榜(market_longhubang)最新数据对应的日期
+def queryDateLonghubangLast():
+    client = MongoClass
+    client.set_datebase("cubeopen")
+    client.set_collection("market_longhubang")
+    coll = client.collection
+    result = list(coll.find({}).sort([("date", -1)]).limit(1))
+    if result is None:
+        return "0"
+    if len(result) == 0:
+        return "0"
+    return result[0]["date"]

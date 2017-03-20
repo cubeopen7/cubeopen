@@ -17,9 +17,9 @@ def update_fncl_statement_date():
     logger = get_logger("error")
     logger_info = get_logger("cubeopen")
     # 统计变量初始化
-    result = {"t_num": 0,
-              "f_num": 0,
-              "error": 0}
+    run_result = {"t_num": 0,
+                  "f_num": 0,
+                  "error": 0}
     t_num = 0
     f_num = 0
     # 获取需要更新的数据
@@ -44,10 +44,10 @@ def update_fncl_statement_date():
             logger.error(traceback.format_exc())
             logger.error("[数据更新][update_fncl_statement_date][%s]财务数据公布日期更新错误" % (code,))
             f_num += 1
-    result["t_num"] = t_num
-    result["f_num"] = f_num
+    run_result["t_num"] = t_num
+    run_result["f_num"] = f_num
     logger_info.info("[数据更新][update_fncl_statement_date]财务数据公布日期更新完毕，更新%d条数据, %d条数据更新错误" % (t_num, f_num))
-    return result
+    return run_result
 
 if __name__ == "__main__":
     update_fncl_statement_date()

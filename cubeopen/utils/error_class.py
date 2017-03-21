@@ -2,3 +2,6 @@
 
 class YoupinError(Exception):
     pass
+
+class CrawlerError(Exception):
+    pass

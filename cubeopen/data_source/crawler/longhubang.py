@@ -52,7 +52,6 @@ def get_longhubang_data(code, date):
     logger = get_logger("cubeopen")
     _date = date_format(date, by=None, to="-")
     _url = _LHB_DATA_URL.format(_date, code)
-    time.sleep(0.05)
     req = urllib.request.Request(_url, None, _HEADERS)
     res = str(urllib.request.urlopen(req).read(), encoding="gbk")
     tree = html.fromstring(res)
@@ -63,9 +62,19 @@ def get_longhubang_data(code, date):
     cond_count = 1
     condition_list = tree.xpath("//div[@class='left con-br']/text()")
     data_list = []
+    while len(condition_list) == 0:
+        time.sleep(10)
+        res = str(urllib.request.urlopen(req).read(), encoding="gbk")
+        tree = html.fromstring(res)
+        name = tree.xpath("//div[@class='tit']/a[@class='tit-a']/text()")[0]
+        name = re.search("(.+)\(", name).groups()[0]
+        condition_list = tree.xpath("//div[@class='left con-br']/text()")
     for cond in condition_list:
         # 上榜类型
-        list_type = re.search("类型：(.+)", str(cond)).groups()[0]
+        list_type = re.search("类型：(.+)", str(cond))
+        if list_type is None:
+            continue
+        list_type = list_type.groups()[0]
         # I.买入榜
         element_list = tree.xpath("//div[@class='content-sepe'][%d]/table[@id='tab-2']/tbody/tr" % (cond_count))
         sc_count = len(element_list)

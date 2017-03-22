@@ -55,3 +55,14 @@ def latest_quarter(date, mode=1):
             return str(year) + "1231"
     elif mode == 2:
         return year, quarter
+
+# 获取下N自然日期
+def related_date(date, distance=1):
+    d1 = datetime.datetime.strptime(date, "%Y%m%d")
+    if distance > 0:
+        d2 = d1 + datetime.timedelta(days=distance)
+    elif distance < 0:
+        d2 = d1 - datetime.timedelta(days=distance)
+    else:
+        return date
+    return d2.strftime("%Y%m%d")

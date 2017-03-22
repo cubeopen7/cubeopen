@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from cubeopen.query import *
+from cubeopen.utils.func import *
 from cubeopen.utils.decorator import data_log
 from cubeopen.dbwarpper.connect.mongodb import MongoClass
 from cubeopen.data_source.crawler.longhubang import *
@@ -59,7 +60,38 @@ def update_market_longhubang():
                 logger.error("[数据更新][update_market_longhubang]%s日龙虎榜数据更新错误" % (date,))
                 raise
     else:
-        pass
+        start_date = related_date(latest_date)
+        date_list = queryTradeDateList(start_date)
+        for date in date_list:
+            try:
+                stock_count = 0
+                stock_list = get_longhubang_list(date)
+                data = None
+                data_list = []
+                for code in stock_list:
+                    stock_data = get_longhubang_data(code, date)
+                    if data is None:
+                        data = stock_data
+                    else:
+                        data = data.append(stock_data)
+                    stock_count += 1
+                if data is None:
+                    continue
+                if len(data) == 0:
+                    continue
+                for i in range(data.shape[0]):
+                    t = data.iloc[i].to_dict()
+                    t["ranking"] = int(t["ranking"])
+                    t["direction"] = int(t["direction"])
+                    t["list_count"] = int(t["list_count"])
+                    data_list.append(t)
+                coll.insert_many(data_list)
+                logger_info.info("[数据更新][update_market_longhubang]%s日龙虎榜数据更新完毕，共%d支股票" % (date, stock_count))
+                t_num += 1
+            except Exception as e:
+                logger.error(traceback.format_exc())
+                logger.error("[数据更新][update_market_longhubang]%s日龙虎榜数据更新错误" % (date,))
+                raise
     exe_result["t_num"] = t_num
     exe_result["f_num"] = f_num
     logger_info.info("[数据更新][update_market_longhubang]龙虎榜数据更新完毕")

@@ -1,19 +1,27 @@
 # -*- coding: utf-8 -*-
 
+'''
+1. 未开板的新股, value值为:上市一字板天数 alpha_new_stock_real
+2. 新股开板, 开板日记录1 alpha_break_limit
+'''
+
 from cubeopen.query import *
 from cubeopen.utils.cal.kline_cal import *
 from cubeopen.utils.decorator import alpha_log
 from cubeopen.dbwarpper.connect.mongodb import MongoClass
 
 @alpha_log("alpha_new_stock_real")
-def update_market_longhubang():
+def update_alpha_new_stock_real():
     # 常量
     _table_name = "alpha_new_stock_real"
+    _table_name_sub = "alpha_break_limit"
     # 获取mongodb数据库连接
     client = MongoClass
     client.set_datebase("cubeopen")
     client.set_collection(_table_name)
     coll = client.collection
+    client.set_collection(_table_name_sub)
+    coll_sub = client.collection
     client.set_collection("market_daily")
     market_coll = client.collection
     # 获取logger
@@ -46,13 +54,15 @@ def update_market_longhubang():
                             break
                         _d = _data[0]
                         _date = _d["date"]
-                        if is_yiziban(_d):
+                        if is_new_yiziban(_d):
                             _res = {"code": code, "date": _date, "value": _limit_count}
                             coll.insert_one(_res)
                             _limit_count += 1
                         else:
                             _res = {"code": code, "date": _date, "value": 0}
                             coll.insert_one(_res)
+                            _res_sub = {"code": code, "date": _date, "value": 1}
+                            coll_sub.insert_one(_res_sub)
                             t_num += 1
                             _b_ctn = 1
                             break
@@ -72,13 +82,15 @@ def update_market_longhubang():
                             break
                         _d = _data[0]
                         _date = _d["date"]
-                        if is_yiziban(_d):
+                        if is_new_yiziban(_d):
                             _res = {"code": code, "date": _date, "value": _limit_count}
                             coll.insert_one(_res)
                             _limit_count += 1
                         else:
                             _res = {"code": code, "date": _date, "value": 0}
                             coll.insert_one(_res)
+                            _res_sub = {"code": code, "date": _date, "value": 1}
+                            coll_sub.insert_one(_res_sub)
                             t_num += 1
                             _b_ctn = 1
                             break
@@ -93,8 +105,9 @@ def update_market_longhubang():
     exe_result["t_num"] = t_num
     exe_result["f_num"] = f_num
     logger_info.info("[数据更新][%s]分析数据更新完成, 更新%d条数据, %d条数据更新错误" % (_table_name, t_num, f_num))
+    logger_info.info("[数据更新][%s]分析数据更新完成, 更新%d条数据, %d条数据更新错误" % (_table_name_sub, t_num, f_num))
     return exe_result
 
 
 if __name__ == "__main__":
-    update_market_longhubang()
+    update_alpha_new_stock_real()

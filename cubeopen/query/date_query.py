@@ -38,3 +38,16 @@ def queryDateLonghubangLast():
     if len(result) == 0:
         return "0"
     return result[0]["date"]
+
+# 查询单支标的在某个数据分析表中的最新日期
+def queryDateStockAlpha(code, table_name):
+    client = MongoClass
+    client.set_datebase("cubeopen")
+    client.set_collection(table_name)
+    coll = client.collection
+    result = list(coll.find({"code": code}, {"_id": 0, "date": 1}).sort([("date", -1)]).limit(1))
+    if result is None:
+        return "0"
+    if len(result) == 0:
+        return "0"
+    return result[0]["date"]

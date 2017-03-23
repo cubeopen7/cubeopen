@@ -49,8 +49,6 @@ def get_longhubang_list(date):
 
 # 获得单日单支标的的龙虎榜数据
 def get_longhubang_data(code, date):
-    if code == "600900" and date == "20120530":
-        return None
     logger = get_logger("cubeopen")
     _date = date_format(date, by=None, to="-")
     _url = _LHB_DATA_URL.format(_date, code)
@@ -65,6 +63,9 @@ def get_longhubang_data(code, date):
     condition_list = tree.xpath("//div[@class='left con-br']/text()")
     data_list = []
     while len(condition_list) == 0:
+        element_list = tree.xpath("//div[@class='content-sepe'][%d]/table[@id='tab-2']" % (cond_count))
+        if len(element_list) > 0:
+            return None
         time.sleep(10)
         res = str(urllib.request.urlopen(req).read(), encoding="gbk")
         tree = html.fromstring(res)

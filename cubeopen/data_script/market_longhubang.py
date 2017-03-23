@@ -99,4 +99,11 @@ def update_market_longhubang():
 
 
 if __name__ == "__main__":
-    update_market_longhubang()
+    done = 0
+    while done == 0:
+        try:
+            update_market_longhubang()
+            done = 1
+        except Exception as e:
+            print(e)
+            print("采集超时,龙虎榜数据重新采集")

@@ -72,7 +72,7 @@ def update_market_longhubang():
                     stock_data = get_longhubang_data(code, date)
                     if data is None:
                         data = stock_data
-                    else:
+                    elif stock_data is not None:
                         data = data.append(stock_data)
                     stock_count += 1
                 if data is None:

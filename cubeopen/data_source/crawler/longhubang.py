@@ -49,6 +49,8 @@ def get_longhubang_list(date):
 
 # 获得单日单支标的的龙虎榜数据
 def get_longhubang_data(code, date):
+    if code == "600900" and date == "20120530":
+        return None
     logger = get_logger("cubeopen")
     _date = date_format(date, by=None, to="-")
     _url = _LHB_DATA_URL.format(_date, code)

@@ -8,9 +8,17 @@ from cubeopen.dbwarpper.connect.mongodb import MongoClass
 from cubeopen.data_source.youpin.market import getYoupinTodayInfo_21007
 
 if __name__ == "__main__":
-    a = []
-    b = pd.DataFrame(a)
-    print(a)
+    client = MongoClass
+    client.set_datebase("cubeopen")
+    client.set_collection("aaa")
+    coll = client.collection
+    client.set_collection("bbb")
+    coll2 = client.collection
+    coll.insert_one({"aaa": 1})
+
+    # a = []
+    # b = pd.DataFrame(a)
+    # print(a)
 
     # a = getYoupinTodayInfo_21007()
     # data = tquant.get_financial("600000")

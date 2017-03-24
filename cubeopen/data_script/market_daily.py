@@ -65,6 +65,5 @@ def update_market_daily():
     logger_info.info("[数据更新][update_market_daily]日线行情数据更新完成")
     return result
 
-
 if __name__ == "__main__":
     update_market_daily()

@@ -36,9 +36,59 @@ def update_alpha_yiziban():
             if _date == "0":    # 数据库中没有因子数据, 计算有史以来每个交易日
                 _date_list = queryDateListStockTrade(code)
                 for date in _date_list:
-                    pass
+                    _s_data = queryMarketData(code, date=date)
+                    if len(_s_data) == 0:
+                        continue
+                    _s_data = _s_data.iloc[0].to_dict()
+                    if is_yiziban(_s_data):
+                        _a_value = queryAlphaData(code, "alpha_new_stock_real", date=date)
+                        if len(_a_value) == 0:
+                            _res = {"code": code, "date": date, "value": 1}
+                            coll.insert_one(_res)
+                            t_num += 1
+                            continue
+                        _a_value = _a_value.iloc[0].to_dict()
+                        if _a_value["value"] > 0:
+                            _res = {"code": code, "date": date, "value": 0}
+                            coll.insert_one(_res)
+                            continue
+                        _res = {"code": code, "date": date, "value": 1}
+                        coll.insert_one(_res)
+                        t_num += 1
+                    else:
+                        _res = {"code": code, "date": date, "value": 0}
+                        coll.insert_one(_res)
             else:
-                pass
+                _date_list = queryDateListStockTrade(code, date=_date)
+                if _date_list is None:
+                    continue
+                if len(_date_list) == 0:
+                    continue
+                for date in _date_list:
+                    _s_data = queryMarketData(code, date=date)
+                    if len(_s_data) == 0:
+                        continue
+                    _s_data = _s_data.iloc[0].to_dict()
+                    if is_yiziban(_s_data):
+                        _a_value = queryAlphaData(code, "alpha_new_stock_real", date=date)
+                        if len(_a_value) == 0:
+                            _res = {"code": code, "date": date, "value": 1}
+                            coll.insert_one(_res)
+                            t_num += 1
+                            continue
+                        _a_value = _a_value.iloc[0].to_dict()
+                        if _a_value["value"] > 0:
+                            _res = {"code": code, "date": date, "value": 0}
+                            coll.insert_one(_res)
+                            t_num += 1
+                            continue
+                        _res = {"code": code, "date": date, "value": 1}
+                        coll.insert_one(_res)
+                        t_num += 1
+                    else:
+                        _res = {"code": code, "date": date, "value": 0}
+                        coll.insert_one(_res)
+                        t_num += 1
         except Exception as e:
             logger.error(traceback.format_exc())
             logger.error("[分析数据更新][%s][%s]因子更新错误" % (_table_name, code))

@@ -54,17 +54,20 @@ def queryDateStockAlpha(code, table_name):
     return result[0]["date"]
 
 # 查询单支股票的交易时间
-def queryDateListStockTrade(code, dir=1, limit=None):
+def queryDateListStockTrade(code, date=None, dir=1, limit=None):
     # 1.dir==1 : 由历史到现在
     # 2.dir==-1: 由现在到历史
     client = MongoClass
     client.set_datebase("cubeopen")
     client.set_collection("market_daily")
     coll = client.collection
+    cond_dict = {"code": code}
+    if date is not None:
+        cond_dict["date"] = {"$gt": date}
     if limit is None:
-        _res = list(coll.find({"code": code},{"_id": 0, "date": 1}).sort([("date", dir)]))
+        _res = list(coll.find(cond_dict,{"_id": 0, "date": 1}).sort([("date", dir)]))
     else:
-        _res = list(coll.find({"code": code}, {"_id": 0, "date": 1}).sort([("date", dir)]).limit(limit))
+        _res = list(coll.find(cond_dict, {"_id": 0, "date": 1}).sort([("date", dir)]).limit(limit))
     if _res is None:
         return []
     if len(_res) == 0:

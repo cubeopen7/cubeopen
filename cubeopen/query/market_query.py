@@ -23,9 +23,15 @@ def queryMarketData(code, date=None, start_date=None, end_date=None, drct=1, lim
             raise ValueError("[DATE]与[START_DATE|END_DATE]不能同时存在")
         cond_dict["date"] = date
     else:   # 范围日期选股
-        if limit is not None:
+        if start_date is not None and limit is not None:
             raise ValueError("获取范围日期数据不能使用[LIMIT]参数")
-        cond_dict["date"] = {"$gte": start_date, "$lte": end_date}
+        range_date = {}
+        if start_date is not None:
+            range_date["$gte"] = start_date
+        if end_date is not None:
+            range_date["$lte"] = end_date
+        if len(range_date) != 0:
+            cond_dict["date"] = range_date
     if limit is None:
         if fields is None:
             _res = list(coll.find(cond_dict).sort([("date", drct)]))
@@ -33,9 +39,9 @@ def queryMarketData(code, date=None, start_date=None, end_date=None, drct=1, lim
             _res = list(coll.find(cond_dict, fields).sort([("date", drct)]))
     else:
         if fields is None:
-            _res = list(coll.find(cond_dict).sort([("date", drct)])).limit(limit)
+            _res = list(coll.find(cond_dict).sort([("date", drct)]).limit(limit))
         else:
-            _res = list(coll.find(cond_dict, fields).sort([("date", drct)])).limit(limit)
+            _res = list(coll.find(cond_dict, fields).sort([("date", drct)]).limit(limit))
     if _res is None:
         return pd.DataFrame([])
     if len(_res) == 0:

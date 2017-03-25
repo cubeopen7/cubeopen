@@ -27,3 +27,30 @@ def is_yiziban(data):
     if open == high == low == close and chg > 9.8:
         return True
     return False
+
+# 判断非一字板涨停
+def is_unyiziban_limit(data):
+    try:
+        high = int(data["high"] * 1000)
+        low = int(data["low"] * 1000)
+        close = int(data["close"] * 1000)
+        per_close = int(data["per_close"] * 1000)
+        uplimit = int(round(per_close * 1.1, -1))
+        if low < high and high == close == uplimit:
+            return True
+        return False
+    except ValueError as e:
+        return False
+
+# 判断开板且收盘未封上
+def is_break_limit(data):
+    try:
+        high = int(data["high"]*1000)
+        close = int(data["close"]*1000)
+        per_close = int(data["per_close"]*1000)
+        uplimit = int(round(per_close* 1.1, -1))
+        if high == uplimit and close < high:
+            return True
+        return False
+    except ValueError as e:
+        return False

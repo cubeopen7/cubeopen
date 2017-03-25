@@ -10,11 +10,11 @@ from cubeopen.utils.cal.kline_cal import *
 from cubeopen.utils.decorator import alpha_log
 from cubeopen.dbwarpper.connect.mongodb import MongoClass
 
-@alpha_log(["alpha_new_stock_real", "alpha_break_limit"])
+@alpha_log(["alpha_new_stock_real", "alpha_new_break_limit"])
 def update_alpha_new_stock_real():
     # 常量
     _table_name = "alpha_new_stock_real"
-    _table_name_sub = "alpha_break_limit"
+    _table_name_sub = "alpha_new_break_limit"
     # 获取mongodb数据库连接
     client = MongoClass
     client.set_datebase("cubeopen")

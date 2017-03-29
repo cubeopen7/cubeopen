@@ -62,10 +62,13 @@ def update_alpha_pearson_price_volume():
                 _data.sort_values(by="date", ascending=True, inplace=True)
                 data_list = []
                 for i in range(_data.shape[0]):
-                    if i < window_size - 1:
-                        continue
                     _s_date = _data.iloc[i].to_dict()["date"]
                     if _s_date not in _date_list:
+                        continue
+                    if i < window_size - 1:
+                        _data_dict = {"code": code, "date": _s_date, "value": None}
+                        data_list.append(_data_dict)
+                        t_num += 1
                         continue
                     _data_dict = {"code": code, "date": _s_date}
                     _p = _data.iloc[i - window_size + 1:i + 1].corr(method="pearson", min_periods=window_size).at["close", "volume"]

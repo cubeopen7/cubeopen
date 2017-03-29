@@ -9,9 +9,6 @@ from cubeopen.query import *
 from cubeopen.utils.decorator import alpha_log
 from cubeopen.dbwarpper.connect.mongodb import MongoClass
 
-def calculate(data):
-    return 1
-
 @alpha_log("alpha_time_macd_golden_cross")
 def update_alpha_time_macd_golden_cross():
     # 常量
@@ -31,14 +28,26 @@ def update_alpha_time_macd_golden_cross():
                   "f_num": 0,
                   "error": 0}
     # 获取股票列表
-    stock_list = queryStockList()
     latest_date = queryDateAlphaLast(table_name)
-    date_list = queryDateListTrade(start_date=latest_date)
+    if latest_date == "0":
+        date_list = queryDateListTrade(start_date=latest_date)
+    else:
+        date_list = queryDateListTrade(start_date=related_date(latest_date, distance=1))
     for date in date_list:
         try:
-            data = queryAlphaSectionData(table_name="alpha_tech_macd", end_date=date, limit=2, fields=["code", "date", "macd"])
-            res = data.groupby(by="code").apply(calculate)
-            a = 1
+            data_list = []
+            stock_list = queryStockListSingleDay("alpha_tech_macd", date)
+            for code in stock_list:
+                _data = queryAlphaData(code, "alpha_tech_macd", end_date=date, drct=-1, limit=2, fields=["code", "date", "macd"])
+                if len(_data) < 2:
+                    continue
+                _t_data = list(_data["macd"])
+                if _t_data[0] > 0 and _t_data[1] < 0:
+                    data_list.append({"code":code, "date":date, "value": 1})
+                    t_num += 1
+            if len(data_list) == 0:
+                continue
+            coll.insert_many(data_list)
         except:
             logger.error(traceback.format_exc())
             logger.error("[分析数据更新][%s][%s]因子更新错误" % (table_name, date))

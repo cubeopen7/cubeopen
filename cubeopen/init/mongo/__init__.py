@@ -36,3 +36,7 @@ def init_mongo():
     coll.ensure_index([("code", 1)])
     coll.ensure_index([("date", -1)])
     coll.ensure_index([("code", 1), ("date", -1)])
+    # 5.日历表
+    coll_name = "base_calendar"
+    coll = db.get_collection(coll_name)
+    coll.ensure_index([("date", 1)])

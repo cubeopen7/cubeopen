@@ -1,6 +1,7 @@
 # -*- coding:utf8 -*-
 
 import datetime
+from ..dbwarpper.connect.mongodb import MongoClass
 
 # 日期字符串格式转换
 def date_format(date, by=None, to=None):
@@ -56,13 +57,34 @@ def latest_quarter(date, mode=1):
     elif mode == 2:
         return year, quarter
 
-# 获取下N自然日期
+# 根据天数间隔获取附近自然日
 def related_date(date, distance=1):
     d1 = datetime.datetime.strptime(date, "%Y%m%d")
     if distance > 0:
         d2 = d1 + datetime.timedelta(days=distance)
     elif distance < 0:
-        d2 = d1 - datetime.timedelta(days=distance)
+        d2 = d1 - datetime.timedelta(days=abs(distance))
     else:
         return date
     return d2.strftime("%Y%m%d")
+
+# 根据天数间隔获取附近交易日
+def related_trade_date(date, distance=1):
+    client = MongoClass
+    client.set_datebase("cubeopen")
+    client.set_collection("base_calendar")
+    coll = client.collection
+    if distance > 0:
+        res = list(coll.find({"date":{"$gt": date}}).sort([("date", 1)]).limit(distance))
+        if len(res) == 0:
+            return "0"
+        else:
+            return res[-1]["date"]
+    elif distance < 0:
+        res = list(coll.find({"date":{"$lt": date}}).sort([("date", -1)]).limit(abs(distance)))
+        if len(res) == 0:
+            return "0"
+        else:
+            return res[-1]["date"]
+    else:
+        return date

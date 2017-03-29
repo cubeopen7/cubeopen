@@ -33,7 +33,7 @@ def update_alpha_break_limit():
     stock_list = queryStockList()
     for code in stock_list:
         try:
-            _date = queryDateStockAlpha(code, _table_name)
+            _date = queryDateStockAlphaLast(code, _table_name)
             if _date == "0":
                 _s_data = queryMarketData(code, fields=["code", "date", "high", "close", "per_close"])
                 if len(_s_data) == 0:

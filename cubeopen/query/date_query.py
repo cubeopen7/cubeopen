@@ -1,7 +1,9 @@
 # -*- coding:utf8 -*-
 
+import datetime
 import pandas as pd
-from cubeopen.dbwarpper.connect.mongodb import MongoClass
+from ..utils.func import *
+from ..dbwarpper.connect.mongodb import MongoClass
 
 # 查询标的在日线行情数据库(market_daily)中的最新数据对应的日期
 def queryDateSingleStockLast(code):
@@ -53,12 +55,25 @@ def queryDateLonghubangLast():
     return result[0]["date"]
 
 # 查询单支标的在某个数据分析表中的最新日期
-def queryDateStockAlpha(code, table_name):
+def queryDateStockAlphaLast(code, table_name):
     client = MongoClass
     client.set_datebase("cubeopen")
     client.set_collection(table_name)
     coll = client.collection
     result = list(coll.find({"code": code}, {"_id": 0, "date": 1}).sort([("date", -1)]).limit(1))
+    if result is None:
+        return "0"
+    if len(result) == 0:
+        return "0"
+    return result[0]["date"]
+
+# 查询因子表中的最新日期
+def queryDateAlphaLast(table_name):
+    client = MongoClass
+    client.set_datebase("cubeopen")
+    client.set_collection(table_name)
+    coll = client.collection
+    result = list(coll.find({},{"_id": 0, "date": 1}).sort([("date", -1)]).limit(1))
     if result is None:
         return "0"
     if len(result) == 0:
@@ -85,3 +100,30 @@ def queryDateListStockTrade(code, date=None, dir=1, limit=None):
     if len(_res) == 0:
         return []
     return list(pd.DataFrame(_res)["date"])
+
+# 查询大盘交易日期列表
+def queryDateListTrade(start_date=None, end_date=None, direction=1, limit=None):
+    # 1.dir==1 : 由历史到现在
+    # 2.dir==-1: 由现在到历史
+    client = MongoClass
+    client.set_datebase("cubeopen")
+    client.set_collection("base_calendar")
+    coll = client.collection
+    cond_dict = {}
+    date_dict = {}
+    if start_date is not None and start_date != "0":
+        date_dict["$gte"] = start_date
+    if end_date is not None:
+        date_dict["$lte"] = end_date
+    else:
+        date_dict["$lte"] = today_date()
+    cond_dict["date"] = date_dict
+    if limit is None:
+        res = list(coll.find(cond_dict, {"_id": 0, "date": 1}).sort([("date", direction)]))
+    else:
+        res = list(coll.find(cond_dict, {"_id": 0, "date": 1}).sort([("date", direction)]).limit(limit))
+    if res is None:
+        return []
+    if len(res) == 0:
+        return []
+    return list(pd.DataFrame(res)["date"])

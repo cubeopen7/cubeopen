@@ -1,7 +1,8 @@
 # -*- coding: utf8 -*-
 
 import pandas as pd
-from cubeopen.dbwarpper.connect.mongodb import MongoClass
+from ..utils.func import *
+from ..dbwarpper.connect.mongodb import MongoClass
 
 # 获取因子表数据
 def queryAlphaData(code, table_name, date=None, start_date=None, end_date=None, drct=1, limit=None, fields=["code", "date", "value"]):
@@ -43,3 +44,34 @@ def queryAlphaData(code, table_name, date=None, start_date=None, end_date=None, 
     _pd_data = pd.DataFrame(_res)
     _pd_data = _pd_data.drop("_id", axis=1)
     return _pd_data
+
+# 获取因子截面数据
+def queryAlphaSectionData(table_name, date=None, start_date=None, end_date=None, limit=None, fields=["code", "date", "value"]):
+    client = MongoClass
+    client.set_datebase("cubeopen")
+    client.set_collection(table_name)
+    coll = client.collection
+    cond_dict = {}
+    date_dict = {}
+    if date is not None:
+        cond_dict["date"] = date
+    if start_date is not None:
+        date_dict["$gte"] = start_date
+        if end_date is None:
+            if limit is None:
+                date_dict["$lte"] = today_date()
+            else:
+                _date = related_trade_date(start_date, limit - 1)
+                if _date != "0":
+                    date_dict["$lte"] = _date
+    if end_date is not None:
+        date_dict["$lte"] = end_date
+        if start_date is None:
+            if limit is not None:
+                _date = related_trade_date(end_date, -(limit - 1))
+                if _date != "0":
+                    date_dict["$gte"] = _date
+    if len(date_dict) != 0:
+        cond_dict["date"] = date_dict
+    res = list(coll.find(cond_dict, fields))
+    return pd.DataFrame(res)

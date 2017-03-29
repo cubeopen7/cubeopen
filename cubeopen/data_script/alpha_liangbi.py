@@ -35,7 +35,7 @@ def update_alpha_liangbi():
     stock_list = queryStockList()
     for code in stock_list:
         try:
-            _date = queryDateStockAlpha(code, _table_name)
+            _date = queryDateStockAlphaLast(code, _table_name)
             if _date == "0":
                 _data = queryMarketData(code, fields=["code", "date", "volume"])
                 if len(_data) == 0:

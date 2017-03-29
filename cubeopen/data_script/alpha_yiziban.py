@@ -32,7 +32,7 @@ def update_alpha_yiziban():
     stock_list = queryStockList()
     for code in stock_list:
         try:
-            _date = queryDateStockAlpha(code, _table_name)
+            _date = queryDateStockAlphaLast(code, _table_name)
             if _date == "0":    # 数据库中没有因子数据, 计算有史以来每个交易日
                 _date_list = queryDateListStockTrade(code)
                 for date in _date_list:

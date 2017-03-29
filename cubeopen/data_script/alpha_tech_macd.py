@@ -19,7 +19,6 @@ def update_alpha_tech_macd():
     client.set_collection(_table_name)
     coll = client.collection
     client.set_collection("market_daily")
-    market_coll = client.collection
     # 获取logger
     logger = get_logger("error")
     logger_info = get_logger("cubeopen")
@@ -33,7 +32,7 @@ def update_alpha_tech_macd():
     stock_list = queryStockList()
     for code in stock_list:
         try:
-            _date = queryDateStockAlpha(code, _table_name)
+            _date = queryDateStockAlphaLast(code, _table_name)
             if _date == "0":
                 _s_data = queryMarketData(code, fields=["code", "date", "close"])
                 if len(_s_data) == 0:

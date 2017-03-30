@@ -48,7 +48,7 @@ def update_alpha_time_macd_golden_cross():
             if len(data_list) == 0:
                 continue
             coll.insert_many(data_list)
-        except:
+        except Exception as e:
             logger.error(traceback.format_exc())
             logger.error("[分析数据更新][%s][%s]因子更新错误" % (table_name, date))
             f_num += 1

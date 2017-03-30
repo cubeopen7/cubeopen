@@ -2,7 +2,7 @@
 
 '''
 1. 未开板的新股, value值为:上市一字板天数 alpha_new_stock_real
-2. 新股开板, 开板日记录1 alpha_break_limit
+2. 新股开板, 开板日记录1 alpha_new_break_limit
 '''
 
 from cubeopen.query import *

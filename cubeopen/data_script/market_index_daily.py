@@ -38,7 +38,7 @@ def update_market_index_daily():
                 value = insert_data.iloc[i].to_dict()
                 value["code"] = code
                 data_list.append(value)
-            if len(data_list) == 0:
+            if len(data_list) != 0:
                 coll.insert_many(data_list)
                 logger_info.info("[数据更新][update_market_index_daily][%s]日线指数数据更新错误" % (code,))
                 t_num += 1

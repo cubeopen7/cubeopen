@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-MACD金叉
+MACD底背离
 MACD: 参数12,26,9
 '''
 
@@ -9,10 +9,10 @@ from cubeopen.query import *
 from cubeopen.utils.decorator import alpha_log
 from cubeopen.dbwarpper.connect.mongodb import MongoClass
 
-@alpha_log("alpha_time_macd_golden_cross")
-def update_alpha_time_macd_golden_cross():
+@alpha_log("alpha_time_macd_bottom_divergence")
+def update_alpha_time_macd_bottom_divergence():
     # 常量
-    table_name = "alpha_time_macd_golden_cross"
+    table_name = "alpha_time_macd_bottom_divergence"
     # 获取mongodb数据库连接
     client = MongoClass
     client.set_datebase("cubeopen")
@@ -35,19 +35,7 @@ def update_alpha_time_macd_golden_cross():
         date_list = queryDateListTrade(start_date=related_date(latest_date, distance=1))
     for date in date_list:
         try:
-            data_list = []
-            stock_list = queryStockListSingleDay("alpha_tech_macd", date)
-            for code in stock_list:
-                _data = queryAlphaData(code, "alpha_tech_macd", end_date=date, drct=-1, limit=2, fields=["code", "date", "macd"])
-                if len(_data) < 2:
-                    continue
-                _t_data = list(_data["macd"])
-                if _t_data[0] > 0 and _t_data[1] < 0:
-                    data_list.append({"code":code, "date":date, "value": 1})
-                    t_num += 1
-            if len(data_list) == 0:
-                continue
-            coll.insert_many(data_list)
+            pass
         except:
             logger.error(traceback.format_exc())
             logger.error("[分析数据更新][%s][%s]因子更新错误" % (table_name, date))
@@ -59,4 +47,4 @@ def update_alpha_time_macd_golden_cross():
 
 
 if __name__ == "__main__":
-    update_alpha_time_macd_golden_cross()
+    update_alpha_time_macd_bottom_divergence()

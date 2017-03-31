@@ -47,7 +47,8 @@ def update_alpha_tech_macd():
                 _date_list = queryDateListStockTrade(code, date=_date)
                 if len(_date_list) == 0:
                     continue
-                _s_data = queryMarketData(code, end_date=_date_list[-1], drct=-1, limit=len(_date_list) + 33, fields=["code", "date", "close"])
+                # _s_data = queryMarketData(code, fields=["code", "date", "close"])
+                _s_data = queryMarketData(code, end_date=_date_list[-1], drct=-1, limit=len(_date_list) + 200, fields=["code", "date", "close"])
                 if len(_s_data) == 0:
                     continue
                 _s_data.sort_values(by="date", ascending=True, inplace=True)

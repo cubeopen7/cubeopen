@@ -17,7 +17,6 @@ def EMA(data, N):
 def MACD(data, N1=12, N2=26, N3=9):
     if isinstance(data, pd.Series):
         data = data.values
-    # diff = EMA(data, N1) - EMA(data, N2)
     diff, dea, _macd = talib.MACD(data, fastperiod=N1, slowperiod=N2, signalperiod=N3)
     macd = _macd * 2
     return macd, diff, dea

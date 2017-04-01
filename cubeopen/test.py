@@ -1,20 +1,22 @@
-# -*- coding:utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import pickle
 import tquant
-import tushare
+import tushare as ts
 import pandas as pd
 from cubeopen.dbwarpper.connect.mongodb import MongoClass
 from cubeopen.data_source.youpin.market import getYoupinTodayInfo_21007
 
 if __name__ == "__main__":
-    client = MongoClass
-    client.set_datebase("cubeopen")
-    client.set_collection("aaa")
-    coll = client.collection
-    client.set_collection("bbb")
-    coll2 = client.collection
-    coll.insert_one({"aaa": 1})
+    data = ts.get_report_data(1990, 1)
+    print(data)
+    # client = MongoClass
+    # client.set_datebase("cubeopen")
+    # client.set_collection("aaa")
+    # coll = client.collection
+    # client.set_collection("bbb")
+    # coll2 = client.collection
+    # coll.insert_one({"aaa": 1})
 
     # a = []
     # b = pd.DataFrame(a)

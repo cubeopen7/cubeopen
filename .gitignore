@@ -6,5 +6,6 @@
 /log/
 /.idea/
 /cubeopen.egg-info/
+/cubeopen/init/source/
 /cubeopen/init/mongo/source/index_data/
 /cubeopen/init/mongo/source/market_data/

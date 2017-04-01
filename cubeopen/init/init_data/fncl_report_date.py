@@ -61,3 +61,4 @@ for year in range(1989, _year+1):
         except Exception as e:
             logger.error(e)
             raise
+pd.DataFrame(total_list).to_csv("../source/fncl_report_date/report_date.csv" , index=False)

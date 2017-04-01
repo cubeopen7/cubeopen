@@ -1,9 +1,8 @@
-# -*- coding:utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from cubeopen.query import *
 from cubeopen.logger.logger import *
 from cubeopen.dbwarpper.connect.mongodb import MongoClass
-from cubeopen.dbwarpper.connect.mysqldb import YoupinClass
 
 def update_fncl_statement_date():
     # 常量

@@ -1,9 +1,10 @@
-# -*- coding:utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import math
 import tquant
 
 from cubeopen.query import *
+from cubeopen.query.special_report_date_query import queryReportDate
 from cubeopen.logger.logger import *
 from cubeopen.utils.func import *
 from cubeopen.utils.constant import *
@@ -89,7 +90,9 @@ def update_fncl_statement():
                 for i in range(data.shape[0]):
                     value = data.iloc[i].to_dict()
                     date = value["date"]
-                    report_date = queryDateReport(code, date)
+                    report_date = queryReportDate(code, date)
+                    if report_date is None:
+                        report_date = queryDateReport(code,date)
                     value["report_date"] = report_date
                     value["code"] = code
                     for k, v in value.items():
@@ -160,7 +163,9 @@ def update_fncl_statement():
                 for i in range(data.shape[0]):
                     value = data.iloc[i].to_dict()
                     date = value["date"]
-                    report_date = queryDateReport(code, date)
+                    report_date = queryReportDate(code, date)
+                    if report_date is None:
+                        report_date = queryDateReport(code,date)
                     value["report_date"] = report_date
                     value["code"] = code
                     for k, v in value.items():

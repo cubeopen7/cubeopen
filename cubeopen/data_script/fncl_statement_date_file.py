@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import datetime
 import pandas as pd
 import tushare as ts
@@ -8,18 +9,21 @@ from cubeopen.utils.func import latest_quarter
 
 def update_fncl_statement_date_file():
     logger = get_logger("error")
+    logger_info = get_logger("cubeopen")
     t_num = 0
-    _data = pd.read_csv("../init/source/fncl_report_date/report_date.csv", dtype={"code":str, "report_date":str, "end_date":str})
+    dir = os.path.join(os.path.split(os.path.realpath(__file__))[0], os.path.pardir) + "/init/source/fncl_report_date/report_date.csv"
+    _data = pd.read_csv(dir, dtype={"code": str, "report_date": str, "end_date": str})
     today_date = datetime.datetime.now().strftime("%Y%m%d")
     _year, _quarter = latest_quarter(today_date, mode=2)
     _t_quarter = _quarter - 3
-    if _t_quarter > 0:
-        start_year = _year
-        start_quarter = _t_quarter
-    else:
-        start_year = _year - 1
-        start_quarter = 4 + _t_quarter
-
+    # if _t_quarter > 0:
+    #     start_year = _year
+    #     start_quarter = _t_quarter
+    # else:
+    #     start_year = _year - 1
+    #     start_quarter = 4 + _t_quarter
+    start_year = 1989
+    start_quarter = 4
     for year in range(start_year, _year+1):
         begin_quarter = 1
         end_quarter = 4
@@ -68,6 +72,8 @@ def update_fncl_statement_date_file():
                     real_date = str(real_year) + _t[0] + _t[1]
                     result_list.append({"code":code, "report_date": real_date, "end_date": end_date})
                     t_num += 1
+                if len(result_list) == 0:
+                    continue
                 new_data = pd.DataFrame(result_list)
                 _data = _data.append(new_data, ignore_index=True)
             except OSError as e:
@@ -76,8 +82,8 @@ def update_fncl_statement_date_file():
                 logger.error(e)
                 raise
     _data = _data.drop_duplicates(subset=["code", "end_date"])
-    _data.to_csv("../init/source/fncl_report_date/report_date.csv", index=False)
-    print(t_num)
+    _data.to_csv(dir, index=False)
+    logger_info.info("[update_report_date]本次更新%d条财报报告日期数据" % t_num)
 
 
 if __name__ == "__main__":

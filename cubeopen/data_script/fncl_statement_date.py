@@ -6,7 +6,7 @@ from cubeopen.dbwarpper.connect.mongodb import MongoClass
 
 def update_fncl_statement_date():
     # 常量
-    _start_date = "20151231"
+    _start_date = "20091231"
     # 获取mongodb数据库连接
     client = MongoClass
     client.set_datebase("cubeopen")

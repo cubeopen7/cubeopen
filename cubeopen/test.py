@@ -6,10 +6,12 @@ import tushare as ts
 import pandas as pd
 from cubeopen.dbwarpper.connect.mongodb import MongoClass
 from cubeopen.data_source.youpin.market import getYoupinTodayInfo_21007
+from cubeopen.data_source.youpin.market import *
 
 if __name__ == "__main__":
-    data = ts.get_report_data(1990, 1)
-    print(data)
+    getInterface_20012("600000")
+    # data = ts.get_report_data(1990, 1)
+    # print(data)
     # client = MongoClass
     # client.set_datebase("cubeopen")
     # client.set_collection("aaa")

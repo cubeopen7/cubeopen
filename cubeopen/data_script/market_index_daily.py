@@ -40,7 +40,7 @@ def update_market_index_daily():
                 data_list.append(value)
             if len(data_list) != 0:
                 coll.insert_many(data_list)
-                logger_info.info("[数据更新][update_market_index_daily][%s]日线指数数据更新错误" % (code,))
+                logger_info.info("[数据更新][update_market_index_daily][%s]日线指数数据更新" % (code,))
                 t_num += 1
         except YoupinError as e:
             logger.error("[数据更新][update_market_index_daily][%s]日线指数数据更新错误" % (code,))

@@ -2,9 +2,11 @@
 
 __all__ = ["queryReportDate"]
 
+import os
 import pandas as pd
 
-_REPORT_DATE_DATA = pd.read_csv("../init/source/fncl_report_date/report_date.csv", dtype={"code":str, "report_date":str, "end_date":str})
+_DIR = os.path.join(os.path.split(os.path.realpath(__file__))[0], os.path.pardir) + "/init/source/fncl_report_date/report_date.csv"
+_REPORT_DATE_DATA = pd.read_csv(_DIR, dtype={"code":str, "report_date":str, "end_date":str})
 
 def queryReportDate(code, date):
     try:

@@ -25,9 +25,9 @@ def queryDateMinuteStockLast(code):
     coll = client.collection
     result = list(coll.find({"code": code}, {"_id": 0, "date": 1}).sort([("date", -1)]).limit(1))
     if result is None or len(result) == 0:
-        return "0"
+        return "0", "0"
     else:
-        return result[0]["date"]
+        return result[0]["date"], result[0]["minute"]
 
 # 查询指数标的在指标数据库(market_index_daily)中的最新数据对应的日期
 def queryDateSingleIndexLast(code):

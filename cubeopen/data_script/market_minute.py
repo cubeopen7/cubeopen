@@ -27,8 +27,12 @@ def update_market_minute():
         try:
             latest_date = queryDateMinuteStockLast(code)
             insert_list = []
-            if latest_date == "0":
-                pass
+            if latest_date[0] != today_date():
+                _data = getInterface_20012(code)
+                if len(_data) == 0:
+                    continue
+
+                a = 1
         except YoupinError as e:
             logger.error("[数据更新][update_market_minute][%s]分钟行情数据更新错误" % (code,))
         except Exception as e:

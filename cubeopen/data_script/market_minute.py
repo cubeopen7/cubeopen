@@ -104,16 +104,32 @@ def update_market_minute():
                 _t_data = pd.DataFrame(_list)
                 _res_data = _res_data.append(_t_data)
                 # 增量更新
+                date = int(date)
                 _l1 = queryDateMinuteStockLast(code, ktype=1)
-                _r = _res_data[(_res_data["ktype"] == 1) & (_res_data["minute"] > _l1[1])]
+                if date == int(_l1[0]):
+                    _r = _res_data[(_res_data["ktype"] == 1) & (_res_data["minute"] > _l1[1])]
+                else:
+                    _r = _res_data[_res_data["ktype"] == 1]
                 _l5 = queryDateMinuteStockLast(code, ktype=5)
-                _r = _r.append(_res_data[(_res_data["ktype"] == 5) & (_res_data["minute"] > _l5[1])])
+                if date == int(_l5[0]):
+                    _r = _r.append(_res_data[(_res_data["ktype"] == 5) & (_res_data["minute"] > _l5[1])])
+                else:
+                    _r = _r.append(_res_data[_res_data["ktype"] == 5])
                 _l15 = queryDateMinuteStockLast(code, ktype=15)
-                _r = _r.append(_res_data[(_res_data["ktype"] == 15) & (_res_data["minute"] > _l15[1])])
+                if date == int(_l15[0]):
+                    _r = _r.append(_res_data[(_res_data["ktype"] == 15) & (_res_data["minute"] > _l15[1])])
+                else:
+                    _r = _r.append(_res_data[_res_data["ktype"] == 15])
                 _l30 = queryDateMinuteStockLast(code, ktype=30)
-                _r = _r.append(_res_data[(_res_data["ktype"] == 30) & (_res_data["minute"] > _l30[1])])
+                if date == int(_l30[0]):
+                    _r = _r.append(_res_data[(_res_data["ktype"] == 30) & (_res_data["minute"] > _l30[1])])
+                else:
+                    _r = _r.append(_res_data[_res_data["ktype"] == 30])
                 _l60 = queryDateMinuteStockLast(code, ktype=60)
-                _r = _r.append(_res_data[(_res_data["ktype"] == 60) & (_res_data["minute"] > _l60[1])])
+                if date == int(_l60[0]):
+                    _r = _r.append(_res_data[(_res_data["ktype"] == 60) & (_res_data["minute"] > _l60[1])])
+                else:
+                    _r = _r.append(_res_data[_res_data["ktype"] == 60])
                 if len(_r) == 0:
                     continue
                 res = []

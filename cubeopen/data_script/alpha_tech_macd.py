@@ -18,7 +18,6 @@ def update_alpha_tech_macd():
     client.set_datebase("cubeopen")
     client.set_collection(_table_name)
     coll = client.collection
-    client.set_collection("market_daily")
     # 获取logger
     logger = get_logger("error")
     logger_info = get_logger("cubeopen")

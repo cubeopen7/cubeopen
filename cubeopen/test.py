@@ -7,9 +7,12 @@ import pandas as pd
 from cubeopen.dbwarpper.connect.mongodb import MongoClass
 from cubeopen.data_source.youpin.market import getYoupinTodayInfo_21007
 from cubeopen.data_source.youpin.market import *
+from cubeopen.query.market_query import queryDataDaily
 
 if __name__ == "__main__":
-    getInterface_20012("600000")
+    a = queryDataDaily("600000", date="20170413")
+    print(a)
+    # getInterface_20012("600000")
     # data = ts.get_report_data(1990, 1)
     # print(data)
     # client = MongoClass

@@ -35,7 +35,7 @@ def update_alpha_volume_ma():
         try:
             _date = queryDateStockAlphaLast(code, _table_name)
             if _date == "0":
-                _data = queryMarketData(code, fields=["code", "date", "volume"])
+                _data = queryDataDaily(code, fields=["code", "date", "volume"])
                 if len(_data) == 0:
                     continue
                 _data["vol5"] = MA(_data["volume"], 5)
@@ -50,7 +50,7 @@ def update_alpha_volume_ma():
                 _date_list = queryDateListStockTrade(code, date=_date)
                 if len(_date_list) == 0:
                     continue
-                _data = queryMarketData(code, end_date=_date_list[-1], drct=-1, limit=len(_date_list)+60, fields=["code", "date", "volume"])
+                _data = queryDataDaily(code, end_date=_date_list[-1], n_count=len(_date_list)+60, direction="positive", fields=["code", "date", "volume"])
                 if len(_data) == 0:
                     continue
                 _data.sort_values(by="date", ascending=True, inplace=True)

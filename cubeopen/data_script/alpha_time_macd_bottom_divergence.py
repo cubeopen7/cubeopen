@@ -44,10 +44,10 @@ def update_alpha_time_macd_bottom_divergence():
                 if len(_data) < 2:
                     continue
                 _date_latter = _data["date"].iloc[0]
-                _price_latter = queryMarketData(code, date=_date_latter, fields=["close"])["close"].iloc[0]
+                _price_latter = queryDataDaily(code, date=_date_latter, fields=["date", "close"])["close"].iloc[0]
                 _diff_latter = queryAlphaData(code, "alpha_tech_macd", date=_date_latter, fields=["diff"])["diff"].iloc[0]
                 _date_former = _data["date"].iloc[1]
-                _price_former = queryMarketData(code, date=_date_former, fields=["close"])["close"].iloc[0]
+                _price_former = queryDataDaily(code, date=_date_former, fields=["date", "close"])["close"].iloc[0]
                 _diff_former = queryAlphaData(code, "alpha_tech_macd", date=_date_former, fields=["diff"])["diff"].iloc[0]
                 if _price_latter < _price_former and _diff_latter > _diff_former:
                     data_list.append({"code": code, "date": date, "value": 1})

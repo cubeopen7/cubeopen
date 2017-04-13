@@ -35,7 +35,7 @@ def update_alpha_pearson_price_volume():
         try:
             _date = queryDateStockAlphaLast(code, _table_name)
             if _date == "0":
-                _s_data = queryMarketData(code, fields=["code", "date", "close", "volume"])
+                _s_data = queryDataDaily(code, fields=["code", "date", "close", "volume"])
                 if len(_s_data) == 0:
                     continue
                 data_list = []
@@ -56,7 +56,7 @@ def update_alpha_pearson_price_volume():
                 _date_list = queryDateListStockTrade(code, date=_date)
                 if len(_date_list) == 0:
                     continue
-                _data = queryMarketData(code, end_date=_date_list[-1], drct=-1, limit=len(_date_list) + 14, fields=["code", "date", "close", "volume"])
+                _data = queryDataDaily(code, end_date=_date_list[-1], n_count=len(_date_list) + 14, direction="positive", fields=["code", "date", "close", "volume"])
                 if len(_data) == 0:
                     continue
                 _data.sort_values(by="date", ascending=True, inplace=True)

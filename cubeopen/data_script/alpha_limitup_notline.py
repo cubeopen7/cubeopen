@@ -35,7 +35,7 @@ def update_alpha_limitup_notline():
         try:
             _date = queryDateStockAlphaLast(code, _table_name)
             if _date == "0":
-                _s_data = queryMarketData(code, fields=["code", "date", "high", "low", "close", "per_close"])
+                _s_data = queryDataDaily(code, fields=["code", "date", "high", "low", "close", "per_close"])
                 if len(_s_data) == 0:
                     continue
                 data_list = []
@@ -51,7 +51,7 @@ def update_alpha_limitup_notline():
                     t_num += 1
                 coll.insert_many(data_list)
             else:
-                _s_data = queryMarketData(code, start_date=related_date(_date, 1), fields=["code", "date", "high", "low", "close", "per_close"])
+                _s_data = queryDataDaily(code, start_date=related_date(_date, 1), fields=["code", "date", "high", "low", "close", "per_close"])
                 if len(_s_data) == 0:
                     continue
                 data_list = []

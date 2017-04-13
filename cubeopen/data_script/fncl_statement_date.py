@@ -2,7 +2,9 @@
 
 from cubeopen.query import *
 from cubeopen.logger.logger import *
+from cubeopen.query.special_report_date_query import *
 from cubeopen.dbwarpper.connect.mongodb import MongoClass
+
 
 def update_fncl_statement_date():
     # 常量
@@ -35,7 +37,10 @@ def update_fncl_statement_date():
             date = value["date"]
             report_date = queryDateReport(code, date)
             if report_date is None:
-                continue
+                report_date = queryReportDate(code, date)
+                if report_date is None:
+                    continue
+                a = 1
             coll.update_one({"code": code, "date": date}, {"$set": {"report_date": report_date}})
             logger_info.info("[数据更新][update_fncl_statement_date][%s-%s]财务报表发布日补全" % (code, date))
             t_num += 1

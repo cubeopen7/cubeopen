@@ -88,3 +88,10 @@ def related_trade_date(date, distance=1):
             return res[-1]["date"]
     else:
         return date
+
+# 字符串转列表, 检查股票代码是否是列表
+def insure_list(param):
+    if isinstance(param, str):
+        return [param]
+    if isinstance(param, list):
+        return param

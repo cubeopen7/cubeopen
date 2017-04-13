@@ -34,7 +34,7 @@ def update_market_minute():
                     continue
                 date_list = list(set(list(total_data["date"])))
                 for _t_date in date_list:
-                    if int(latest_date[0]) >= int(_t_date):
+                    if int(latest_date[0]) >= int(_t_date) and int(today) >= int(_t_date):
                         continue
                     _data = total_data[total_data["date"]==_t_date]
                     if _data["volume"].iloc[0] == 0.0:

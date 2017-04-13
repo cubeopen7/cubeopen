@@ -19,7 +19,7 @@ def getFieldString(field):
 
 # 拼接json接口url字符串
 def getYoupinMarketUrl(funcno, version="1", **kwargs):
-    url = BASE_URL[1]
+    url = BASE_URL[0]
     try:
         url += "funcno=" + str(funcno)
     except Exception as e:

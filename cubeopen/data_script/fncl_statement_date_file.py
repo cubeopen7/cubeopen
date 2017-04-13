@@ -22,7 +22,7 @@ def update_fncl_statement_date_file():
     # else:
     #     start_year = _year - 1
     #     start_quarter = 4 + _t_quarter
-    start_year = 2015
+    start_year = 1989
     start_quarter = 4
     for year in range(start_year, _year+1):
         begin_quarter = 1

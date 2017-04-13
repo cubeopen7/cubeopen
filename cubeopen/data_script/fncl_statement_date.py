@@ -40,7 +40,6 @@ def update_fncl_statement_date():
                 report_date = queryReportDate(code, date)
                 if report_date is None:
                     continue
-                a = 1
             coll.update_one({"code": code, "date": date}, {"$set": {"report_date": report_date}})
             logger_info.info("[数据更新][update_fncl_statement_date][%s-%s]财务报表发布日补全" % (code, date))
             t_num += 1

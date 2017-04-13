@@ -8,6 +8,12 @@ from .method import *
 from ....logger.logger import *
 from ....utils.error_class import YoupinError
 
+def _re_minute(minute):
+    if minute < 720:
+        return minute - 569
+    if minute >= 720:
+        return minute - 659
+
 # 接口20012: 最新交易日分钟数据
 def getInterface_20012(code, market=None, count=None, type=1):
     logger = get_logger("error")
@@ -39,7 +45,7 @@ def getInterface_20012(code, market=None, count=None, type=1):
     result = result[["date","minute","open","close","high","low","volume","amount"]]
     result["volume"] = result["volume"] * 100
     result["amount"] = result["amount"] * 100
-    result["minute"] = result.index + 1
+    result["minute"] = result["minute"].apply(_re_minute)
     return result
 
 # 接口20044: 历史(包含今日)日线

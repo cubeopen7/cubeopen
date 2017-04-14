@@ -30,7 +30,7 @@ def init_mongo():
     coll.ensure_index([("code", 1)])
     coll.ensure_index([("date", -1)])
     coll.ensure_index([("code", 1), ("date", -1)])
-    # 4,指数日线行情表
+    # 4.指数日线行情表
     coll_name = "market_index_daily"
     coll = db.get_collection(coll_name)
     coll.ensure_index([("code", 1)])
@@ -40,7 +40,11 @@ def init_mongo():
     coll_name = "base_calendar"
     coll = db.get_collection(coll_name)
     coll.ensure_index([("date", 1)])
-    # 6.分钟行情数据表
+    # 6.国债表
+    coll_name = "base_debt_yield"
+    coll = db.get_collection(coll_name)
+    coll.ensure_index([("date", -1)])
+    # 7.分钟行情数据表
     coll_name = "market_minute"
     coll = db.get_collection(coll_name)
     coll.ensure_index([("code", 1)])

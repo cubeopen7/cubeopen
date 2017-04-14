@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 
 '''
-MACD金叉
+MACD金叉, MACD死叉
 MACD: 参数12,26,9
+value:  1. 金叉
+        2. 死叉
 '''
 
 from cubeopen.query import *
 from cubeopen.utils.decorator import alpha_log
 from cubeopen.dbwarpper.connect.mongodb import MongoClass
 
-@alpha_log("alpha_time_macd_golden_cross")
-def update_alpha_time_macd_golden_cross():
+@alpha_log("alpha_tech_macd_cross")
+def update_alpha_tech_macd_cross():
     # 常量
-    table_name = "alpha_time_macd_golden_cross"
+    table_name = "alpha_tech_macd_cross"
     # 获取mongodb数据库连接
     client = MongoClass
     client.set_datebase("cubeopen")
@@ -43,7 +45,10 @@ def update_alpha_time_macd_golden_cross():
                     continue
                 _t_data = list(_data["macd"])
                 if _t_data[0] > 0 and _t_data[1] < 0:
-                    data_list.append({"code":code, "date":date, "value": 1})
+                    data_list.append({"code": code, "date": date, "value": 1})
+                    t_num += 1
+                elif _t_data[0] < 0 and _t_data[1] > 0:
+                    data_list.append({"code": code, "date": date, "value": 2})
                     t_num += 1
             if len(data_list) == 0:
                 continue
@@ -59,4 +64,4 @@ def update_alpha_time_macd_golden_cross():
 
 
 if __name__ == "__main__":
-    update_alpha_time_macd_golden_cross()
+    update_alpha_tech_macd_cross()

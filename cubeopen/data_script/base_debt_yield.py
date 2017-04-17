@@ -44,9 +44,51 @@ def update_base_debt_yield():
             html = urllib.request.urlopen(req).read()
             with open("./source/{}.xlsx".format(year), "wb") as f:
                 f.write(html)
-            a = 1
+            _data = pd.read_excel("./source/{}.xlsx".format(year))
+            if len(_data) == 0:
+                continue
+            _result = []
+            _data.columns = ["date", "duration", "s_duration", "yield"]
+            _data["date"] = _data["date"].map(lambda x: x.replace("/", ""))
+            _date_list = list(_data.drop_duplicates("date")["date"])
+            for _date in _date_list:
+                _res_dict = {"date": _date}
+                _sub_data = _data[_data["date"] == _date]
+                for i in range(len(_sub_data)):
+                    _t_value = _sub_data.iloc[i].to_dict()
+                    _res_dict[_t_value["duration"]] = _t_value["yield"]
+                _result.append(_res_dict)
+                t_num += 1
+            coll.insert_many(_result)
+            logger_info.info("[数据更新]{}年国债收益数据更新完成".format(year))
     else:
-        pass
+        _start_year = int(_last_date[:4])
+        for year in range(_start_year, _year + 1):
+            _url = _YIELD_DATA_HISTORY.format(year)
+            req = urllib.request.Request(_url, None, _HEADERS)
+            html = urllib.request.urlopen(req).read()
+            with open("./source/{}.xlsx".format(year), "wb") as f:
+                f.write(html)
+            _data = pd.read_excel("./source/{}.xlsx".format(year))
+            if len(_data) == 0:
+                continue
+            _data.columns = ["date", "duration", "s_duration", "yield"]
+            _data["date"] = _data["date"].map(lambda x: x.replace("/", ""))
+            _data = _data[_data["date"] > _last_date]
+            if len(_data) == 0:
+                continue
+            _date_list = list(_data.drop_duplicates("date")["date"])
+            _result = []
+            for _date in _date_list:
+                _res_dict = {"date": _date}
+                _sub_data = _data[_data["date"] == _date]
+                for i in range(len(_sub_data)):
+                    _t_value = _sub_data.iloc[i].to_dict()
+                    _res_dict[_t_value["duration"]] = _t_value["yield"]
+                _result.append(_res_dict)
+                t_num += 1
+            coll.insert_many(_result)
+            logger_info.info("[数据更新]{}年国债收益数据更新完成, 更新{}条数据".format(year, t_num))
     exe_result["t_num"] = t_num
     exe_result["f_num"] = f_num
     logger_info.info("[数据更新]国债收益数据更新完成, 更新%d条数据, %d条数据更新错误" % (t_num, f_num))

@@ -7,7 +7,7 @@ from cubeopen.dbwarpper.connect.mongodb import MongoClass
 
 def init_calendar():
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection("base_calendar")
     coll = client.collection
     # 读取资源文件

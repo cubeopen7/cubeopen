@@ -33,7 +33,7 @@ if __name__ == "__main__":
     # data = ts.get_report_data(1990, 1)
     # print(data)
     # client = MongoClass
-    # client.set_datebase("cubeopen")
+    # client.set_database("cubeopen")
     # client.set_collection("aaa")
     # coll = client.collection
     # client.set_collection("bbb")
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     # data = tushare.get_report_data(2001,4)
     # a = 1
     # client = MongoClass
-    # client.set_datebase("cubeopen")
+    # client.set_database("cubeopen")
     # client.set_collection("test")
     # coll = client.collection
     # coll.insert_many([{"test": None}])

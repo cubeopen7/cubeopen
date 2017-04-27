@@ -11,7 +11,7 @@ from cubeopen.dbwarpper.connect.mongodb import MongoClass
 @data_log("fncl_dividend")
 def update_fncl_dividend():
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection("fncl_dividend")
     coll = client.collection
 

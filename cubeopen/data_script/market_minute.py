@@ -15,7 +15,7 @@ def update_market_minute():
                   "f_num": 0,
                   "error": 0}
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection("market_minute")
     coll = client.collection
     # 获取logger

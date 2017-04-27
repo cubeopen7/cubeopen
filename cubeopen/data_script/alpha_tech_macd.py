@@ -15,7 +15,7 @@ def update_alpha_tech_macd():
     _table_name = "alpha_tech_macd"
     # 获取mongodb数据库连接
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection(_table_name)
     coll = client.collection
     # 获取logger

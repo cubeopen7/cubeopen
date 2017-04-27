@@ -18,7 +18,7 @@ def update_df(df_data, table_name, cond, field=None, id=None):
     '''
     logger = get_logger("error")
     mongo = MongoClass
-    mongo.set_datebase("cubeopen")
+    mongo.set_database("cubeopen")
     mongo.set_collection(table_name)
     coll = mongo.collection
     # 生成更新条件字典和字段字典
@@ -80,7 +80,7 @@ def update_df_base_info(df_data):
     logger = get_logger("error")
     logger_info = get_logger("cubeopen")
     mongo = MongoClass
-    mongo.set_datebase("cubeopen")
+    mongo.set_database("cubeopen")
     mongo.set_collection("base_info")
     coll = mongo.collection
     mongo.set_collection("base_holder")

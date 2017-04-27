@@ -11,7 +11,7 @@ def update_market_index_daily():
     coll_name = "market_index_daily"
     # 连接数据库
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection(coll_name)
     coll = client.collection
     # 获取logger

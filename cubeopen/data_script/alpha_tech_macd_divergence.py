@@ -16,7 +16,7 @@ def update_alpha_tech_macd_divergence():
     table_name = "alpha_tech_macd_divergence"
     # 获取mongodb数据库连接
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection(table_name)
     coll = client.collection
     client.set_collection("alpha_tech_macd_cross")

@@ -17,7 +17,7 @@ def update_alpha_new_stock_real():
     _table_name_sub = "alpha_new_break_limit"
     # 获取mongodb数据库连接
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection(_table_name)
     coll = client.collection
     client.set_collection(_table_name_sub)

@@ -13,7 +13,7 @@ def update_market_daily():
     t_num = 0
     f_num = 0
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection("market_daily")
     coll = client.collection
     # 获取logger

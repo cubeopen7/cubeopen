@@ -68,7 +68,7 @@ def alpha_log(table_name):
         def wrapper(*args, **kwargs):
             # 确保索引
             client = MongoClass
-            client.set_datebase("cubeopen")
+            client.set_database("cubeopen")
             table_list = []
             if isinstance(table_name, str):
                 table_list.append(table_name)

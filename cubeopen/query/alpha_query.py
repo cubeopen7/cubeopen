@@ -7,7 +7,7 @@ from ..dbwarpper.connect.mongodb import MongoClass
 # 获取因子表数据
 def queryAlphaData(code, table_name, date=None, start_date=None, end_date=None, drct=1, limit=None, fields=["code", "date", "value"]):
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection(table_name)
     coll = client.collection
     cond_dict = {}
@@ -53,7 +53,7 @@ def queryAlphaData(code, table_name, date=None, start_date=None, end_date=None, 
 # 获取因子截面数据
 def queryAlphaSectionData(table_name, date=None, start_date=None, end_date=None, limit=None, fields=["code", "date", "value"]):
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection(table_name)
     coll = client.collection
     cond_dict = {}

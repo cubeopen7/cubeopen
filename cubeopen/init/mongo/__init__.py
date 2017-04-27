@@ -6,7 +6,7 @@ from cubeopen.dbwarpper.connect.mongodb import MongoClass
 
 def init_mongo():
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     db = client.database
     # 获取数据库下的表名list
     coll_name_list = db.collection_names()

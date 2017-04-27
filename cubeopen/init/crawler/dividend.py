@@ -68,7 +68,7 @@ def insert_mongo():
                                                                         "execute_date":str,
                                                                         "end_date":str})
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection("fncl_dividend")
     coll = client.collection
     # 创建索引

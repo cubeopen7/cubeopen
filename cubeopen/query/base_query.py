@@ -8,7 +8,7 @@ from ..dbwarpper.connect.mongodb import MongoClass
 # 获取股票列表
 def queryStockList(name=False):
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection("base_info")
     coll = client.collection
     if name is True:
@@ -33,7 +33,7 @@ def queryIndexList(name=False):
 # 根据起始日期获取交易日期列表
 def queryTradeDateList(start_date, end_date=today_date()):
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection("base_calendar")
     coll = client.collection
     result = list(coll.find({"date":{"$gte":start_date, "$lte":end_date}},{"_id":0, "date":1}).sort([("date", 1)]))

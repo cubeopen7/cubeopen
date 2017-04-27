@@ -18,7 +18,7 @@ _YIELD_DATA_HISTORY = "http://yield.chinabond.com.cn/cbweb-mn/yc/downYearBzqx?ye
 def update_base_debt_yield():
     # 获取mongodb数据库连接
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection("base_debt_yield")
     coll = client.collection
     # 获取logger

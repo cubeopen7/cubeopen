@@ -12,7 +12,7 @@ def update_market_longhubang():
     _start_date = "20100101"
     # 获取mongodb数据库连接
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection("market_longhubang")
     coll = client.collection
     # 获取logger

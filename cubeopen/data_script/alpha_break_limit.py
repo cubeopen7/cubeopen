@@ -16,7 +16,7 @@ def update_alpha_break_limit():
     _table_name = "alpha_break_limit"
     # 获取mongodb数据库连接
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection(_table_name)
     coll = client.collection
     client.set_collection("market_daily")

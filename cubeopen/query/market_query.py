@@ -13,7 +13,7 @@ def queryDataDaily(code, date=None, start_date=None, end_date=None, day_count=No
     elif stype == "index":
         _coll_name = "market_index_daily"
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection(_coll_name)
     coll = client.collection
     # 常量
@@ -68,7 +68,7 @@ def queryDataDaily(code, date=None, start_date=None, end_date=None, day_count=No
 # # 获取单支股票的历史行情数据
 # def queryMarketData(code, date=None, start_date=None, end_date=None, drct=1, limit=None, fields=None):
 #     client = MongoClass
-#     client.set_datebase("cubeopen")
+#     client.set_database("cubeopen")
 #     client.set_collection("market_daily")
 #     coll = client.collection
 #     cond_dict = {}
@@ -116,7 +116,7 @@ def queryDataDaily(code, date=None, start_date=None, end_date=None, day_count=No
 # # 获取单支股票的历史行情数据
 # def queryIndexData(code, date=None, start_date=None, end_date=None, drct=1, limit=None, fields=None):
 #     client = MongoClass
-#     client.set_datebase("cubeopen")
+#     client.set_database("cubeopen")
 #     client.set_collection("market_index_daily")
 #     coll = client.collection
 #     cond_dict = {}

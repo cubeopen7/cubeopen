@@ -71,7 +71,7 @@ def related_date(date, distance=1):
 # 根据天数间隔获取附近交易日
 def related_trade_date(date, distance=1):
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection("base_calendar")
     coll = client.collection
     if distance > 0:

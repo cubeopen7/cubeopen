@@ -11,7 +11,7 @@ class MongoClass:
         self._client = pymongo.MongoClient(host=host, port=port)
         self._database = None
         self._collection = None
-    def set_datebase(self, database_name):
+    def set_database(self, database_name):
         self._database = self._client.get_database(database_name)
     def set_collection(self, collection_name):
         self._collection = self._database.get_collection(collection_name)

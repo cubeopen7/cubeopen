@@ -12,7 +12,7 @@ from ...query.base_query import queryStockList, queryIndexList
 
 def init_market():
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection("market_daily")
     coll = client.collection
     # 获取logger
@@ -57,7 +57,7 @@ def init_market():
 def init_market_index():
     # 连接数据库
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection("market_index_daily")
     coll = client.collection
     # 获取logger

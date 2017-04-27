@@ -11,7 +11,7 @@ from cubeopen.dbwarpper.connect.mongodb import MongoClass
 # 获取mongodb数据库连接
 _table_name = "market_longhubang"
 client = MongoClass
-client.set_datebase("cubeopen")
+client.set_database("cubeopen")
 client.set_collection(_table_name)
 coll = client.collection
 type_list = coll.distinct("list_type")

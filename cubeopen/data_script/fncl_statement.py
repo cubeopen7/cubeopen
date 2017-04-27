@@ -15,7 +15,7 @@ from cubeopen.dbwarpper.connect.mongodb import MongoClass
 def update_fncl_statement():
     # 获取mongodb数据库连接
     client = MongoClass
-    client.set_datebase("cubeopen")
+    client.set_database("cubeopen")
     client.set_collection("fncl_statement")
     coll = client.collection
     # 获取logger

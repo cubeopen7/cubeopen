@@ -10,8 +10,25 @@ from cubeopen.data_source.youpin.market import *
 from cubeopen.query.market_query import queryDataDaily
 
 if __name__ == "__main__":
-    a = queryDataDaily("600000", date="20170413")
-    print(a)
+    client = MongoClass
+    client.set_datebase("cubeopen")
+    client.set_collection("market_minute")
+    coll = client.collection
+    _data = pd.read_csv("aaa.csv")
+    _data.drop("_id", axis=1, inplace=True)
+    _data = _data.drop_duplicates(["code", "minute", "ktype"])
+    res = []
+    for i in range(_data.shape[0]):
+        _v = _data.iloc[i].to_dict()
+        _v["minute"] = int(_v["minute"])
+        _v["date"] = str(int(_v["date"]))
+        _v["ktype"] = int(_v["ktype"])
+        res.append(_v)
+    coll.insert_many(res)
+    a = 1
+
+    # a = queryDataDaily("600000", date="20170413")
+    # print(a)
     # getInterface_20012("600000")
     # data = ts.get_report_data(1990, 1)
     # print(data)

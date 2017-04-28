@@ -10,6 +10,22 @@ from ..dbwarpper.connect.mongodb import MongoClass
 def QueryDateToday():
     return datetime.datetime.now().strftime("%Y%m%d")
 
+# 查询表中最新日期
+def QueryDateCollection(table_name=None, table_coll=None, query_field="date"):
+    if table_coll is not None:
+        coll = table_coll
+    elif table_name is not None:
+        client = MongoClass
+        client.set_database(MONGODB_DATABASE)
+        client.set_collection(table_name)
+        coll = client.collection
+    cursor = coll.find({}, {"_id": 0, query_field: 1}).sort([(query_field, -1)]).limit(1)
+    result = list(cursor)
+    if len(result) == 0:
+        return "0"
+    else:
+        return result[0][query_field]
+
 # 查询标的在指定表中的最新日期
 def QueryDateSingleStock(code, table_name=None, table_coll=None, query_field="date"):
     if table_coll is not None:
@@ -25,6 +41,64 @@ def QueryDateSingleStock(code, table_name=None, table_coll=None, query_field="da
         return "0"
     else:
         return result[0][query_field]
+
+# 查询指定日期附近的自然日期
+def QueryDateRecnetNatural(date, n_count):
+    t_date = datetime.datetime.strptime(date, "%Y%m%d")
+    if n_count > 0:
+        t_date += datetime.timedelta(days=n_count)
+    else:
+        t_date -= datetime.timedelta(days=abs(n_count))
+    return t_date.strftime("%Y%m%d")
+
+# 查询指定日期附近的交易日期
+def QueryDateRecnetCalendar(date, n_count, coll=None):
+    if coll is None:
+        client = MongoClass
+        client.set_database(MONGODB_DATABASE)
+        client.set_collection(MONGODB_CALENDAR_COLL)
+        coll = client.collection
+    if n_count > 0:
+        cursor = coll.find({"date": {"$gt": date}}).sort([("date", 1)]).limit(n_count)
+    else:
+        cursor = coll.find({"date": {"$lt": date}}).sort([("date", -1)]).limit(abs(n_count))
+    result = list(cursor)
+    if len(result) == 0:
+        return
+    else:
+        return result[-1]["date"]
+
+# 查询[指定表][指定股票][指定日期]附近的个股日期
+def QueryDateRecentSingleStock(code, date, n_count, table_name=None, table_coll=None):
+    if table_coll is not None:
+        coll = table_coll
+    elif table_name is not None:
+        client = MongoClass
+        client.set_database(MONGODB_DATABASE)
+        client.set_collection(table_name)
+        coll = client.collection
+    if n_count > 0:
+        result = coll.distinct("date", {"code": code, "date": {"$gt": date}})
+        result = sorted(result, reverse=False)
+        if len(result) > n_count:
+            result = result[:n_count]
+        return result[-1]
+    else:
+        n_count = abs(n_count)
+        result = coll.distinct("date", {"code": code, "date": {"$lt": date}})
+        result = sorted(result, reverse=True)
+        if len(result) > n_count:
+            result = result[:n_count]
+        return result[-1]
+
+# 查询[指定股票][指定日期]附近的个股交易日期
+def QueryDateRecentMarketSingleStock(code, date, n_count, coll=None):
+    if coll is None:
+        client = MongoClass
+        client.set_database(MONGODB_DATABASE)
+        client.set_collection(MONGODB_MARKET_DAILY_COLL)
+        coll = client.collection
+    return QueryDateRecentSingleStock(code=code, date=date, n_count=n_count, table_coll=coll)
 
 # 查询指定日范围内的日历交易日列表
 def QueryDateListCalendar(start_date=None, end_date=None, direction=1, n_limit=None, coll=None):
@@ -66,16 +140,122 @@ def QueryDateListCalendar(start_date=None, end_date=None, direction=1, n_limit=N
     else:
         return list(pd.DataFrame(result)["date"].sort_values(ascending=False))
 
+# 查询指定范围内自然日列表
+def QueryDateListNatural(start_date, end_date, ascending=True):
+    start_date = datetime.datetime.strptime(start_date, "%Y%m%d")
+    end_date = datetime.datetime.strptime(end_date, "%Y%m%d")
+    date_list = []
+    t_date = start_date
+    while t_date <= end_date:
+        date_list.append(t_date.strftime("%Y%m%d"))
+        t_date += datetime.timedelta(days=1)
+    if ascending:
+        return date_list
+    else:
+        return sorted(date_list, reverse=True)
+
+# 查询[指定表][指定股票][指定日期]范围内的个股日期列表
+def QueryDateListSingleStock(code, start_date, end_date, table_name=None, table_coll=None, ascending=True):
+    if table_coll is not None:
+        coll = table_coll
+    elif table_name is not None:
+        client = MongoClass
+        client.set_database(MONGODB_DATABASE)
+        client.set_collection(table_name)
+        coll = client.collection
+    result = list(coll.find({"code": code, "date": {"$gte": start_date, "$lte": end_date}}, {"_id": 0, "date": 1}))
+    if len(result) == 0:
+        return []
+    date_list = list(pd.DataFrame(result)["date"])
+    if ascending:
+        return sorted(date_list, reverse=False)
+    else:
+        return sorted(date_list, reverse=True)
+
+# 查询[指定股票][指定日期]范围内的个股交易日期列表
+def QueryDateListMarketSingleStock(code, start_date, end_date, ascending=True, coll=None):
+    if coll is None:
+        client = MongoClass
+        client.set_database(MONGODB_DATABASE)
+        client.set_collection(MONGODB_MARKET_DAILY_COLL)
+        coll = client.collection
+    return QueryDateListSingleStock(code, start_date, end_date, ascending=ascending, table_coll=coll)
+
+# 查询指定日附近的自然日列表
+def QueryDateListRecentNatural(date, n_count, ascending=True):
+    t_date = datetime.datetime.strptime(date, "%Y%m%d")
+    date_list = []
+    if n_count > 0:
+        for i in range(n_count):
+            t_date += datetime.timedelta(days=1)
+            date_list.append(t_date.strftime("%Y%m%d"))
+    else:
+        for i in range(abs(n_count)):
+            t_date -= datetime.timedelta(days=1)
+            date_list.append(t_date.strftime("%Y%m%d"))
+    if ascending:
+        return sorted(date_list, reverse=False)
+    else:
+        return sorted(date_list, reverse=True)
+
+# 查询指定日期附近的交易日期列表
+def QueryDateListRecnetCalendar(date, n_count, ascending=True, coll=None):
+    if coll is None:
+        client = MongoClass
+        client.set_database(MONGODB_DATABASE)
+        client.set_collection(MONGODB_CALENDAR_COLL)
+        coll = client.collection
+    if n_count > 0:
+        cursor = coll.find({"date": {"$gt": date}}, {"_id": 0, "date": 1}).sort([("date", 1)]).limit(n_count)
+    else:
+        cursor = coll.find({"date": {"$lt": date}}, {"_id": 0, "date": 1}).sort([("date", -1)]).limit(abs(n_count))
+    result = list(cursor)
+    if len(result) == 0:
+        return []
+    date_list = list(pd.DataFrame(result)["date"])
+    if ascending:
+        return sorted(date_list, reverse=False)
+    else:
+        return sorted(date_list, reverse=True)
+
+# 查询[指定表][指定股票][指定日期]附近的个股日期列表
+def QueryDateListRecentSingleStock(code, date, n_count, table_name=None, table_coll=None, ascending=True):
+    if table_coll is not None:
+        coll = table_coll
+    elif table_name is not None:
+        client = MongoClass
+        client.set_database(MONGODB_DATABASE)
+        client.set_collection(table_name)
+        coll = client.collection
+    if n_count > 0:
+        result = coll.distinct("date", {"code": code, "date": {"$gt": date}})
+        result = sorted(result, reverse=False)
+        if len(result) > n_count:
+            result = result[:n_count]
+    else:
+        n_count = abs(n_count)
+        result = coll.distinct("date", {"code": code, "date": {"$lt": date}})
+        result = sorted(result, reverse=True)
+        if len(result) > n_count:
+            result = result[:n_count]
+    date_list = result
+    if ascending:
+        return sorted(date_list, reverse=False)
+    else:
+        return sorted(date_list, reverse=True)
+
+# 查询[指定股票][指定日期]附近的个股交易日期列表
+def QueryDateListRecentMarketSingleStock(code, date, n_count, ascending=True, coll=None):
+    if coll is None:
+        client = MongoClass
+        client.set_database(MONGODB_DATABASE)
+        client.set_collection(MONGODB_MARKET_DAILY_COLL)
+        coll = client.collection
+    return QueryDateListRecentSingleStock(code=code, date=date, n_count=n_count, ascending=ascending, table_coll=coll)
 
 
 
-
-
-
-
-
-
-
+# -------------------------下面的函数听着, 早晚把你们干掉-------------------------
 
 
 

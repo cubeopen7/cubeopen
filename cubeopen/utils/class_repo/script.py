@@ -6,6 +6,7 @@ from multiprocessing import Queue
 from multiprocessing.dummy import Pool as ThreadPool  # 线程
 
 from ...query import *
+from ...utils.func import *
 from ...logger.logger import *
 from ...utils.decorator import data_log, alpha_log
 from ...dbwarpper.connect.mongodb import MongoClass
@@ -33,6 +34,7 @@ class DataScript(object):
             self._decorator = data_log
         else:
             self._decorator = alpha_log
+        self.result_data = []
 
     def _init_database(self):
         self._client = MongoClass
@@ -94,6 +96,21 @@ class DataScript(object):
     def single_error(self, e, error, *args, **kwargs):
         self.error(error)
         self.error("[数据更新][{}][{}]{}数据更新错误".format(self.table_name, args[0], self.explain))
+
+    def data_clear(self):
+        self.result_data = []
+
+    def data_insert_many(self, data_list=None):
+        if data_list:
+            self.collection.insert_many(data_list)
+        else:
+            self.collection.insert_many(self.result_data)
+
+    def tool_next_natural_day(self, date):
+        return related_date(date, distance=1)
+
+    def tool_date_format(self, date, by=None, to="-"):
+        return date_format(date, by=by, to=to)
 
     @property
     def table_name(self):

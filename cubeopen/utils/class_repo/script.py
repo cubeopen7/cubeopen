@@ -28,8 +28,6 @@ class DataScript(object):
             self._pool = ThreadPool(n_thread)
             self.queue_true = Queue()
             self.queue_false = Queue()
-        else:
-            pass
         if decorator == "normal":
             self._decorator = data_log
         else:
@@ -74,7 +72,8 @@ class DataScript(object):
                 self._count_true = self.queue_true.qsize()
                 self._count_false = self.queue_false.qsize()
             else:
-                pass
+                for code in self._stock_list:
+                    self.execute_loop(code)
             self._result["t_num"] = self._count_true
             self._result["f_num"] = self._count_false
             self.info("[数据更新][{}]{}数据更新完毕, {}条更新成功, {}条更新错误".format(self.table_name, self.explain, self._count_true, self._count_false))
@@ -87,6 +86,15 @@ class DataScript(object):
             self.queue_true.put(1)
         except Exception as e:
             self.queue_false.put(1)
+            error_info = traceback.format_exc()
+            self.single_error(e, error_info, *args, **kwargs)
+
+    def execute_loop(self, *args, **kwargs):
+        try:
+            self.single_stock(*args, **kwargs)
+            self._count_true += 1
+        except Exception as e:
+            self._count_false += 1
             error_info = traceback.format_exc()
             self.single_error(e, error_info, *args, **kwargs)
 

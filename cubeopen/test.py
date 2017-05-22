@@ -7,7 +7,7 @@ import pandas as pd
 from cubeopen.dbwarpper.connect.mongodb import MongoClass
 from cubeopen.data_source.youpin.market import getYoupinTodayInfo_21007
 from cubeopen.data_source.youpin.market import *
-from cubeopen.query.market_query import queryDataDaily
+from cubeopen.query.market_query import QueryDataDaily
 from cubeopen.query import *
 
 if __name__ == "__main__":
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     # coll.insert_many(res)
     # a = 1
 
-    # a = queryDataDaily("600000", date="20170413")
+    # a = QueryDataDaily("600000", date="20170413")
     # print(a)
     # getInterface_20012("600000")
     # data = ts.get_report_data(1990, 1)

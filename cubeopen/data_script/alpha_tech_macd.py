@@ -33,7 +33,7 @@ def update_alpha_tech_macd():
         try:
             _date = queryDateStockAlphaLast(code, _table_name)
             if _date == "0":
-                _s_data = queryDataDaily(code, fields=["code", "date", "close"])
+                _s_data = QueryDataDaily(code, fields=["code", "date", "close"])
                 if len(_s_data) == 0:
                     continue
                 _s_data["macd"], _s_data["diff"], _s_data["dea"] = MACD(_s_data["close"])
@@ -46,7 +46,7 @@ def update_alpha_tech_macd():
                 _date_list = queryDateListStockTrade(code, date=_date)
                 if len(_date_list) == 0:
                     continue
-                _s_data = queryDataDaily(code, end_date=_date_list[-1], n_count=len(_date_list) + 200, direction="positive", fields=["code", "date", "close"])
+                _s_data = QueryDataDaily(code, end_date=_date_list[-1], n_count=len(_date_list) + 200, direction="positive", fields=["code", "date", "close"])
                 if len(_s_data) == 0:
                     continue
                 _s_data.sort_values(by="date", ascending=True, inplace=True)

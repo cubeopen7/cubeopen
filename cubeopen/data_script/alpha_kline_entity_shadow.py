@@ -35,7 +35,7 @@ def update_alpha_kline_entity_shadow():
             _date = queryDateStockAlphaLast(code, _table_name)
             data_list = []
             if _date == "0":
-                _s_data = queryDataDaily(code, fields=["code", "date", "open", "high", "low", "close"])
+                _s_data = QueryDataDaily(code, fields=["code", "date", "open", "high", "low", "close"])
                 if len(_s_data) == 0:
                     continue
                 _s_data["entity_high"] = _s_data[["close", "open"]].max(axis=1)
@@ -60,7 +60,7 @@ def update_alpha_kline_entity_shadow():
                 t_num += 1
             else:
                 _s_date = related_date(_date)
-                _s_data = queryDataDaily(code, start_date=_s_date, fields=["code", "date", "open", "high", "low", "close"])
+                _s_data = QueryDataDaily(code, start_date=_s_date, fields=["code", "date", "open", "high", "low", "close"])
                 if len(_s_data) == 0:
                     continue
                 _s_data["entity_high"] = _s_data[["close", "open"]].max(axis=1)

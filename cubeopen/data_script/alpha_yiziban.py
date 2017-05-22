@@ -36,7 +36,7 @@ def update_alpha_yiziban():
             if _date == "0":    # 数据库中没有因子数据, 计算有史以来每个交易日
                 _date_list = queryDateListStockTrade(code)
                 for date in _date_list:
-                    _s_data = queryDataDaily(code, date=date)
+                    _s_data = QueryDataDaily(code, date=date)
                     if len(_s_data) == 0:
                         continue
                     _s_data = _s_data.iloc[0].to_dict()
@@ -65,7 +65,7 @@ def update_alpha_yiziban():
                 if len(_date_list) == 0:
                     continue
                 for date in _date_list:
-                    _s_data = queryDataDaily(code, date=date)
+                    _s_data = QueryDataDaily(code, date=date)
                     if len(_s_data) == 0:
                         continue
                     _s_data = _s_data.iloc[0].to_dict()

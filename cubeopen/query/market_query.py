@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ["queryDataDaily"]
+__all__ = ["QueryDataDaily"]
 
 import pandas as pd
 from ..dbwarpper.connect.mongodb import MongoClass
 from ..utils.func import insure_list, related_trade_date
 
 # 获取[单只股票]或[股票列表]历史行情日线数据
-def queryDataDaily(code, date=None, start_date=None, end_date=None, day_count=None, n_count=None, direction="positive", stype="stock", fields=None):
+def QueryDataDaily(code, date=None, start_date=None, end_date=None, day_count=None, n_count=None, direction="positive", stype="stock", fields=None):
     if stype == "stock":
         _coll_name = "market_daily"
     elif stype == "index":

@@ -50,10 +50,10 @@ def update_alpha_tech_macd_divergence():
                         continue
                     _date_list = list(pd.DataFrame(_data)["date"])
                     _latter_date = _date_list[0]
-                    _latter_price = queryDataDaily(code, date=_latter_date, fields=["date", "close"])["close"].iloc[0]
+                    _latter_price = QueryDataDaily(code, date=_latter_date, fields=["date", "close"])["close"].iloc[0]
                     _latter_diff = queryAlphaData(code, "alpha_tech_macd", date=_latter_date, fields=["diff"])["diff"].iloc[0]
                     _former_date = _date_list[1]
-                    _former_price = queryDataDaily(code, date=_former_date, fields=["date", "close"])["close"].iloc[0]
+                    _former_price = QueryDataDaily(code, date=_former_date, fields=["date", "close"])["close"].iloc[0]
                     _former_diff = queryAlphaData(code, "alpha_tech_macd", date=_former_date, fields=["diff"])["diff"].iloc[0]
                     if _latter_diff > _former_diff and _latter_price < _former_price:
                         data_list.append({"code": code, "date": date, "value": 1})
@@ -69,10 +69,10 @@ def update_alpha_tech_macd_divergence():
                         continue
                     _date_list = list(pd.DataFrame(_data)["date"])
                     _latter_date = _date_list[0]
-                    _latter_price = queryDataDaily(code, date=_latter_date, fields=["date", "close"])["close"].iloc[0]
+                    _latter_price = QueryDataDaily(code, date=_latter_date, fields=["date", "close"])["close"].iloc[0]
                     _latter_diff = queryAlphaData(code, "alpha_tech_macd", date=_latter_date, fields=["diff"])["diff"].iloc[0]
                     _former_date = _date_list[1]
-                    _former_price = queryDataDaily(code, date=_former_date, fields=["date", "close"])["close"].iloc[0]
+                    _former_price = QueryDataDaily(code, date=_former_date, fields=["date", "close"])["close"].iloc[0]
                     _former_diff = queryAlphaData(code, "alpha_tech_macd", date=_former_date, fields=["diff"])["diff"].iloc[0]
                     if _latter_diff < _former_diff and _latter_price > _former_price:
                         data_list.append({"code": code, "date": date, "value": 2})
